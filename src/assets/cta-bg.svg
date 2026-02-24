@@ -1,0 +1,10 @@
+<!-- Placeholder CTA background - Replace with solar panel image -->
+<svg width="1280" height="422" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1976D2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="422" fill="url(#grad3)"/>
+</svg>
