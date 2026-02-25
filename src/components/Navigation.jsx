@@ -4,7 +4,7 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-white px-4 md:px-7 py-4 md:py-6">
+    <nav className="fixed top-0 left-0 right-0 w-full bg-white px-4 md:px-7 py-4 md:py-6 shadow-md z-50">
       <div className="max-w-[1280px] mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="w-[100px] h-[35px] md:w-[133px] md:h-[47px]">
@@ -34,8 +34,8 @@ const Navigation = () => {
         </button>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center gap-8 font-bold text-base">
-          <a href="#journey" className="text-primary hover:text-blue-700 transition-colors">
+        <div className="hidden md:flex items-center gap-6 lg:gap-8 font-bold text-base ml-auto">
+          <a href="#journey" className="text-primary hover:text-blue-700 transition-colors whitespace-nowrap">
             Journey with Energy
           </a>
           <a href="#projects" className="text-dark hover:text-primary transition-colors">
@@ -60,7 +60,7 @@ const Navigation = () => {
 
         {/* Mobile Navigation Menu */}
         {isMenuOpen && (
-          <div className="absolute top-[60px] left-0 right-0 bg-white shadow-lg md:hidden z-50">
+          <div className="absolute top-[67px] left-0 right-0 bg-white shadow-lg md:hidden z-50">
             <div className="flex flex-col py-4 px-4 space-y-3 font-bold text-base">
               <a href="#journey" className="text-primary hover:text-blue-700 transition-colors py-2">
                 Journey with Energy

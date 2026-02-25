@@ -13,14 +13,16 @@ function App() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
-      <Header />
-      <StatsSection />
-      <OurBrand />
-      <Vision />
-      <WhatWeDo />
-      <WhyGoSolar />
-      <CallToAction />
-      <Footer />
+      <div className="pt-[67px] md:pt-[79px]">
+        <Header />
+        <StatsSection />
+        <OurBrand />
+        <Vision />
+        <WhatWeDo />
+        <WhyGoSolar />
+        <CallToAction />
+        <Footer />
+      </div>
     </div>
   );
 }
