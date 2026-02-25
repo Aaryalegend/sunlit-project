@@ -3,15 +3,13 @@
 @tailwind utilities;
 
 /* Century Gothic font fallback */
-body {
-  margin: 0;
-  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/*Changed to Poppins*/
+@font-face {
+  font-family: "Century Gothic";
+  src: url("/fonts/CenturyGothic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
-
 * {
   box-sizing: border-box;
 }
