@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Navigation = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <nav className="w-full bg-white px-7 py-6">
+    <nav className="w-full bg-white px-4 md:px-7 py-4 md:py-6">
       <div className="max-w-[1280px] mx-auto flex justify-between items-center">
         {/* Logo */}
-        <div className="w-[133px] h-[47px]">
+        <div className="w-[100px] h-[35px] md:w-[133px] md:h-[47px]">
           <img 
-            src={require('../assets/logo.svg')} 
+            src={require('../assets/logo.png')} 
             alt="Sun Lit Tech Logo" 
             className="w-full h-full object-contain"
             onError={(e) => {
@@ -16,8 +18,23 @@ const Navigation = () => {
           />
         </div>
 
-        {/* Navigation Links */}
-        <div className="flex items-center gap-8 font-bold text-base">
+        {/* Mobile Menu Button */}
+        <button 
+          className="md:hidden p-2 text-dark"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex items-center gap-8 font-bold text-base">
           <a href="#journey" className="text-primary hover:text-blue-700 transition-colors">
             Journey with Energy
           </a>
@@ -40,6 +57,35 @@ const Navigation = () => {
             calculator
           </a>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMenuOpen && (
+          <div className="absolute top-[60px] left-0 right-0 bg-white shadow-lg md:hidden z-50">
+            <div className="flex flex-col py-4 px-4 space-y-3 font-bold text-base">
+              <a href="#journey" className="text-primary hover:text-blue-700 transition-colors py-2">
+                Journey with Energy
+              </a>
+              <a href="#projects" className="text-dark hover:text-primary transition-colors py-2">
+                projects
+              </a>
+              <a href="#blogs" className="text-dark hover:text-primary transition-colors py-2">
+                blogs
+              </a>
+              <a href="#gallery" className="text-dark hover:text-primary transition-colors py-2">
+                gallery
+              </a>
+              <a href="#careers" className="text-dark hover:text-primary transition-colors py-2">
+                careers
+              </a>
+              <a href="#contact" className="text-dark hover:text-primary transition-colors py-2">
+                contact
+              </a>
+              <a href="#calculator" className="text-dark hover:text-primary transition-colors py-2">
+                calculator
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

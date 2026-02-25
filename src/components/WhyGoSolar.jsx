@@ -3,7 +3,7 @@ import React from 'react';
 const WhyGoSolar = () => {
   const benefits = [
     {
-      icon: require('../assets/leaf-icon.svg'),
+      icon: require('../assets/leaf-icon.png'),
       title: 'Environmental Impact',
       points: [
         '1 kW reduces ~1 ton CO₂ annually',
@@ -12,7 +12,7 @@ const WhyGoSolar = () => {
       ]
     },
     {
-      icon: require('../assets/leaf-icon.svg'),
+      icon: require('../assets/leaf-icon.png'),
       title: 'Cost Savings',
       points: [
         'Reduce electricity bills by up to 90%',
@@ -21,7 +21,7 @@ const WhyGoSolar = () => {
       ]
     },
     {
-      icon: require('../assets/leaf-icon.svg'),
+      icon: require('../assets/leaf-icon.png'),
       title: 'Energy Independence',
       points: [
         'Generate your own clean power',
@@ -32,31 +32,31 @@ const WhyGoSolar = () => {
   ];
 
   return (
-    <section className="w-full bg-lightBlue py-20">
-      <div className="max-w-[1280px] mx-auto px-8">
+    <section className="w-full bg-lightBlue py-12 md:py-20">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-[48px] font-bold text-primary mb-4">
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-[32px] md:text-[48px] font-bold text-primary mb-2 md:mb-4">
             Why Go Solar
           </h2>
-          <h3 className="text-[32px] font-normal text-dark">
+          <h3 className="text-[20px] md:text-[32px] font-normal text-dark">
             Benefits of Solar Energy
           </h3>
         </div>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {benefits.map((benefit, index) => (
             <div 
               key={index}
-              className="bg-white rounded-[20px] p-8 shadow-card hover:shadow-xl transition-shadow"
+              className="bg-white rounded-[20px] p-6 md:p-8 shadow-card hover:shadow-xl transition-shadow"
             >
               {/* Icon */}
-              <div className="mb-6">
+              <div className="mb-4 md:mb-6">
                 <img 
                   src={benefit.icon} 
                   alt={benefit.title}
-                  className="w-12 h-12"
+                  className="w-10 h-10 md:w-12 md:h-12"
                   onError={(e) => {
                     e.target.outerHTML = '<div style="width: 52px; height: 52px; background: #4CAF50; border-radius: 50%;"></div>';
                   }}
@@ -64,14 +64,14 @@ const WhyGoSolar = () => {
               </div>
 
               {/* Title */}
-              <h4 className="text-2xl font-bold text-dark text-center mb-6">
+              <h4 className="text-xl md:text-2xl font-bold text-dark text-center mb-4 md:mb-6">
                 {benefit.title}
               </h4>
 
               {/* Points */}
-              <ul className="space-y-3">
+              <ul className="space-y-2 md:space-y-3">
                 {benefit.points.map((point, idx) => (
-                  <li key={idx} className="text-base font-normal text-dark leading-7 tracking-[0.05em]">
+                  <li key={idx} className="text-sm md:text-base font-normal text-dark leading-6 md:leading-7 tracking-[0.05em]">
                     {point}
                   </li>
                 ))}
