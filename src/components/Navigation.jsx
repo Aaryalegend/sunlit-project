@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full bg-white px-4 md:px-7 py-4 md:py-6 shadow-md z-50">
       <div className="max-w-[1280px] mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="w-[100px] h-[35px] md:w-[133px] md:h-[47px]">
-          <img 
-            src={require('../assets/logo.png')} 
-            alt="Sun Lit Tech Logo" 
-            className="w-full h-full object-contain"
-            onError={(e) => {
-              e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="133" height="47"><rect width="133" height="47" fill="%231976D2"/><text x="50%" y="50%" fill="white" text-anchor="middle" dy=".3em" font-family="Arial" font-size="12">Sun Lit Tech</text></svg>';
-            }}
-          />
+          <Link to="/">
+            <img 
+              src={require('../assets/logo.png')} 
+              alt="Sun Lit Tech Logo" 
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="133" height="47"><rect width="133" height="47" fill="%231976D2"/><text x="50%" y="50%" fill="white" text-anchor="middle" dy=".3em" font-family="Arial" font-size="12">Sun Lit Tech</text></svg>';
+              }}
+            />
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -35,54 +41,54 @@ const Navigation = () => {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center gap-6 lg:gap-8 font-bold text-base ml-auto">
-          <a href="#journey" className="text-primary hover:text-blue-700 transition-colors whitespace-nowrap">
+          <Link to="/" className={`${isActive('/') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors whitespace-nowrap`}>
             Journey with Energy
-          </a>
-          <a href="#projects" className="text-dark hover:text-primary transition-colors">
+          </Link>
+          <Link to="/projects" className={`${isActive('/projects') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors`}>
             projects
-          </a>
-          <a href="#blogs" className="text-dark hover:text-primary transition-colors">
+          </Link>
+          <Link to="/blogs" className={`${isActive('/blogs') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors`}>
             blogs
-          </a>
-          <a href="#gallery" className="text-dark hover:text-primary transition-colors">
+          </Link>
+          <Link to="/gallery" className={`${isActive('/gallery') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors`}>
             gallery
-          </a>
-          <a href="#careers" className="text-dark hover:text-primary transition-colors">
+          </Link>
+          <Link to="/careers" className={`${isActive('/careers') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors`}>
             careers
-          </a>
-          <a href="#contact" className="text-dark hover:text-primary transition-colors">
+          </Link>
+          <Link to="/contact" className={`${isActive('/contact') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors`}>
             contact
-          </a>
-          <a href="#calculator" className="text-dark hover:text-primary transition-colors">
+          </Link>
+          <Link to="/calculator" className={`${isActive('/calculator') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors`}>
             calculator
-          </a>
+          </Link>
         </div>
 
         {/* Mobile Navigation Menu */}
         {isMenuOpen && (
           <div className="absolute top-[67px] left-0 right-0 bg-white shadow-lg md:hidden z-50">
             <div className="flex flex-col py-4 px-4 space-y-3 font-bold text-base">
-              <a href="#journey" className="text-primary hover:text-blue-700 transition-colors py-2">
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className={`${isActive('/') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors py-2`}>
                 Journey with Energy
-              </a>
-              <a href="#projects" className="text-dark hover:text-primary transition-colors py-2">
+              </Link>
+              <Link to="/projects" onClick={() => setIsMenuOpen(false)} className={`${isActive('/projects') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors py-2`}>
                 projects
-              </a>
-              <a href="#blogs" className="text-dark hover:text-primary transition-colors py-2">
+              </Link>
+              <Link to="/blogs" onClick={() => setIsMenuOpen(false)} className={`${isActive('/blogs') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors py-2`}>
                 blogs
-              </a>
-              <a href="#gallery" className="text-dark hover:text-primary transition-colors py-2">
+              </Link>
+              <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className={`${isActive('/gallery') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors py-2`}>
                 gallery
-              </a>
-              <a href="#careers" className="text-dark hover:text-primary transition-colors py-2">
+              </Link>
+              <Link to="/careers" onClick={() => setIsMenuOpen(false)} className={`${isActive('/careers') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors py-2`}>
                 careers
-              </a>
-              <a href="#contact" className="text-dark hover:text-primary transition-colors py-2">
+              </Link>
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className={`${isActive('/contact') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors py-2`}>
                 contact
-              </a>
-              <a href="#calculator" className="text-dark hover:text-primary transition-colors py-2">
+              </Link>
+              <Link to="/calculator" onClick={() => setIsMenuOpen(false)} className={`${isActive('/calculator') ? 'text-primary' : 'text-dark'} hover:text-primary transition-colors py-2`}>
                 calculator
-              </a>
+              </Link>
             </div>
           </div>
         )}

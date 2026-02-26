@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -113,11 +114,12 @@ const Footer = () => {
           <div className="md:absolute md:left-[417px] md:top-[187px] md:w-[170px]">
             <h4 className="text-xl md:text-2xl font-bold mb-4 md:mb-[25px] tracking-[0.05em]">Quick Links</h4>
             <ul className="space-y-2 md:space-y-[9px]">
-              <li><a href="#journey" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Journey with Energy</a></li>
-              <li><a href="#blogs" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Blogs</a></li>
-              <li><a href="#projects" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Projects</a></li>
-              <li><a href="#gallery" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Gallery</a></li>
-              <li><a href="#calculator" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Calculator</a></li>
+              <li><Link to="/" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Journey with Energy</Link></li>
+              <li><Link to="/careers" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Careers</Link></li>
+              <li><Link to="/blogs" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Blogs</Link></li>
+              <li><Link to="/projects" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Projects</Link></li>
+              <li><Link to="/gallery" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Gallery</Link></li>
+              <li><Link to="/calculator" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Calculator</Link></li>
             </ul>
           </div>
 
