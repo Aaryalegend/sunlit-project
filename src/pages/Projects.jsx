@@ -1,102 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getProjects } from '../data/projectsData';
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [projects, setProjects] = useState([]);
 
   const filters = ['All', 'Residential', 'Commercial', 'Industrial', 'Government'];
 
-  const projects = [
-    {
-      id: 1,
-      title: 'Residential Solar Installation',
-      category: 'Residential',
-      capacity: '10 kW',
-      location: 'Pune, Maharashtra',
-      description: 'Complete rooftop solar installation for a residential villa with net metering setup.',
-      image: null,
-      stats: { savings: '₹15,000/month', co2: '12 tons/year' }
-    },
-    {
-      id: 2,
-      title: 'Commercial Complex Solar',
-      category: 'Commercial',
-      capacity: '100 kW',
-      location: 'Mumbai, Maharashtra',
-      description: 'Large-scale solar panel installation for a commercial building with battery backup.',
-      image: null,
-      stats: { savings: '₹1,50,000/month', co2: '120 tons/year' }
-    },
-    {
-      id: 3,
-      title: 'Industrial Solar Plant',
-      category: 'Industrial',
-      capacity: '500 kW',
-      location: 'Nagpur, Maharashtra',
-      description: 'Ground-mounted solar power plant for industrial manufacturing unit.',
-      image: null,
-      stats: { savings: '₹7,00,000/month', co2: '600 tons/year' }
-    },
-    {
-      id: 4,
-      title: 'Government School Solar',
-      category: 'Government',
-      capacity: '25 kW',
-      location: 'Satara, Maharashtra',
-      description: 'Solar installation for government school campus under PM Solar Scheme.',
-      image: null,
-      stats: { savings: '₹30,000/month', co2: '30 tons/year' }
-    },
-    {
-      id: 5,
-      title: 'Housing Society Solar',
-      category: 'Residential',
-      capacity: '50 kW',
-      location: 'Hadapsar, Pune',
-      description: 'Rooftop solar for a housing society with shared net metering for all residents.',
-      image: null,
-      stats: { savings: '₹60,000/month', co2: '60 tons/year' }
-    },
-    {
-      id: 6,
-      title: 'Warehouse Solar Setup',
-      category: 'Commercial',
-      capacity: '200 kW',
-      location: 'Pimpri-Chinchwad, Pune',
-      description: 'Solar installation across multiple warehouse rooftops in industrial zone.',
-      image: null,
-      stats: { savings: '₹3,00,000/month', co2: '240 tons/year' }
-    },
-    {
-      id: 7,
-      title: 'Factory Solar Plant',
-      category: 'Industrial',
-      capacity: '1 MW',
-      location: 'Chakan, Pune',
-      description: 'Megawatt-scale ground-mounted solar plant for automotive factory.',
-      image: null,
-      stats: { savings: '₹14,00,000/month', co2: '1200 tons/year' }
-    },
-    {
-      id: 8,
-      title: 'Municipal Building Solar',
-      category: 'Government',
-      capacity: '75 kW',
-      location: 'Solapur, Maharashtra',
-      description: 'Solar power system for municipal corporation building with battery storage.',
-      image: null,
-      stats: { savings: '₹90,000/month', co2: '90 tons/year' }
-    },
-    {
-      id: 9,
-      title: 'Farmhouse Solar System',
-      category: 'Residential',
-      capacity: '15 kW',
-      location: 'Lonavala, Maharashtra',
-      description: 'Off-grid solar solution for farmhouse with complete battery backup system.',
-      image: null,
-      stats: { savings: '₹20,000/month', co2: '18 tons/year' }
-    },
-  ];
+  useEffect(() => {
+    setProjects(getProjects());
+  }, []);
 
   const filteredProjects = activeFilter === 'All' 
     ? projects 
@@ -169,11 +82,15 @@ const Projects = () => {
               >
                 {/* Project Image */}
                 <div className="w-full h-[200px] md:h-[227px] bg-gradient-to-br from-[#1976D2] to-[#0d47a1] relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg className="w-16 h-16 text-white opacity-30" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
-                    </svg>
-                  </div>
+                  {project.image ? (
+                    <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg className="w-16 h-16 text-white opacity-30" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                      </svg>
+                    </div>
+                  )}
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-full px-4 py-1">
                     <span className="text-xs md:text-sm font-bold text-primary">{project.category}</span>

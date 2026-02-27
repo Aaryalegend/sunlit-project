@@ -1,25 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { getGalleryItems } from '../data/galleryData';
 
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedImage, setSelectedImage] = useState(null);
+  const [galleryItems, setGalleryItems] = useState([]);
 
   const filters = ['All', 'Installations', 'Team', 'Events', 'Before & After'];
 
-  const galleryItems = [
-    { id: 1, category: 'Installations', title: 'Residential Rooftop - Pune', description: '10 kW rooftop solar installation', gradient: 'from-blue-400 to-blue-700' },
-    { id: 2, category: 'Installations', title: 'Commercial Solar - Mumbai', description: '100 kW commercial installation', gradient: 'from-cyan-400 to-blue-600' },
-    { id: 3, category: 'Team', title: 'Team at Work', description: 'Our engineers during installation', gradient: 'from-green-400 to-green-700' },
-    { id: 4, category: 'Events', title: 'Solar Expo 2024', description: 'Sun Lit Tech at the annual solar expo', gradient: 'from-yellow-400 to-orange-600' },
-    { id: 5, category: 'Installations', title: 'Ground-Mounted Solar - Nagpur', description: '500 kW ground-mounted system', gradient: 'from-blue-500 to-indigo-700' },
-    { id: 6, category: 'Before & After', title: 'Factory Roof Transformation', description: 'Before and after solar installation', gradient: 'from-gray-400 to-gray-700' },
-    { id: 7, category: 'Team', title: 'Team Celebration', description: '200th project completion celebration', gradient: 'from-purple-400 to-purple-700' },
-    { id: 8, category: 'Installations', title: 'Industrial Plant - Chakan', description: '1 MW industrial solar plant', gradient: 'from-teal-400 to-teal-700' },
-    { id: 9, category: 'Events', title: 'CSR Activity', description: 'Solar panel donation to school', gradient: 'from-pink-400 to-red-600' },
-    { id: 10, category: 'Before & After', title: 'Warehouse Rooftop', description: 'Rooftop solar transformation', gradient: 'from-slate-400 to-slate-700' },
-    { id: 11, category: 'Installations', title: 'Housing Society - Hadapsar', description: '50 kW shared solar system', gradient: 'from-sky-400 to-sky-700' },
-    { id: 12, category: 'Team', title: 'Technical Training', description: 'Annual team training program', gradient: 'from-emerald-400 to-emerald-700' },
-  ];
+  useEffect(() => {
+    setGalleryItems(getGalleryItems());
+  }, []);
 
   const filteredItems = activeFilter === 'All' 
     ? galleryItems 
@@ -32,7 +24,7 @@ const Gallery = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-[#02203E] to-[#1976D2]"></div>
         <div className="relative max-w-[1280px] mx-auto px-4 md:px-[90px] h-full flex flex-col justify-center">
           <h1 className="text-[32px] md:text-[64px] font-bold text-lightBlue leading-tight tracking-[0.05em]">
-            Gallery
+            Project Gallery
           </h1>
           <p className="text-base md:text-2xl font-normal text-white mt-4 max-w-[634px] tracking-[0.05em]">
             A visual journey through our solar installations and team moments
@@ -69,12 +61,16 @@ const Gallery = () => {
                   className={`${isLarge ? 'sm:col-span-2 sm:row-span-2' : ''} relative group cursor-pointer rounded-[20px] overflow-hidden shadow-card hover:shadow-xl transition-all duration-300`}
                   onClick={() => setSelectedImage(item)}
                 >
-                  <div className={`w-full ${isLarge ? 'h-[300px] md:h-[460px]' : 'h-[200px] md:h-[220px]'} bg-gradient-to-br ${item.gradient} relative`}>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <svg className="w-12 h-12 md:w-16 md:h-16 text-white opacity-20" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                      </svg>
-                    </div>
+                  <div className={`w-full ${isLarge ? 'h-[300px] md:h-[460px]' : 'h-[200px] md:h-[220px]'} ${!item.image ? `bg-gradient-to-br ${item.gradient}` : ''} relative`}>
+                    {item.image ? (
+                      <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <svg className="w-12 h-12 md:w-16 md:h-16 text-white opacity-20" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                      </div>
+                    )}
 
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-end">
@@ -104,12 +100,16 @@ const Gallery = () => {
             className="bg-white rounded-[20px] max-w-[800px] w-full overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`w-full h-[300px] md:h-[450px] bg-gradient-to-br ${selectedImage.gradient} relative`}>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <svg className="w-20 h-20 text-white opacity-20" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                </svg>
-              </div>
+            <div className={`w-full h-[300px] md:h-[450px] ${!selectedImage.image ? `bg-gradient-to-br ${selectedImage.gradient}` : ''} relative`}>
+              {selectedImage.image ? (
+                <img src={selectedImage.image} alt={selectedImage.title} className="w-full h-full object-cover" />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg className="w-20 h-20 text-white opacity-20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                  </svg>
+                </div>
+              )}
               <button 
                 className="absolute top-4 right-4 w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-opacity-100 transition-all"
                 onClick={() => setSelectedImage(null)}
