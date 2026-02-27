@@ -21,6 +21,9 @@ import GalleryAdmin from './pages/GalleryAdmin';
 import CareersAdmin from './pages/CareersAdmin';
 import BlogsAdmin from './pages/BlogsAdmin';
 import ProjectsAdmin from './pages/ProjectsAdmin';
+import ApplicationsAdmin from './pages/ApplicationsAdmin';
+import MessagesAdmin from './pages/MessagesAdmin';
+import BlogDetail from './pages/BlogDetail';
 
 function HomePage() {
   return (
@@ -49,6 +52,7 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs/:id" element={<BlogDetail />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />
@@ -60,6 +64,8 @@ function AppContent() {
           <Route path="/admin/careers" element={<AdminLayout><CareersAdmin /></AdminLayout>} />
           <Route path="/admin/blogs" element={<AdminLayout><BlogsAdmin /></AdminLayout>} />
           <Route path="/admin/projects" element={<AdminLayout><ProjectsAdmin /></AdminLayout>} />
+          <Route path="/admin/applications" element={<AdminLayout><ApplicationsAdmin /></AdminLayout>} />
+          <Route path="/admin/messages" element={<AdminLayout><MessagesAdmin /></AdminLayout>} />
         </Routes>
         {!isAdmin && <Footer />}
       </div>

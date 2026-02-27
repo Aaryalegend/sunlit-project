@@ -1,13 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { getPositions } from '../data/careersData';
+import { addApplication } from '../data/applicationsData';
 
 const Careers = () => {
   const [expandedJob, setExpandedJob] = useState(null);
   const [openPositions, setOpenPositions] = useState([]);
+  const [applyingFor, setApplyingFor] = useState(null); // job object or 'general'
+  const [appForm, setAppForm] = useState({ name: '', email: '', phone: '', experience: '', coverLetter: '' });
+  const [toast, setToast] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     setOpenPositions(getPositions());
   }, []);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const openApplyForm = (job) => {
+    setApplyingFor(job);
+    setAppForm({ name: '', email: '', phone: '', experience: '', coverLetter: '' });
+  };
+
+  const handleApply = (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setTimeout(() => {
+      addApplication({
+        position: applyingFor === 'general' ? 'General Application' : applyingFor.title,
+        department: applyingFor === 'general' ? 'General' : applyingFor.department,
+        ...appForm,
+      });
+      setSubmitting(false);
+      setApplyingFor(null);
+      showToast('Application submitted successfully! We will get back to you soon.');
+    }, 800);
+  };
 
   const benefits = [
     { icon: '🌱', title: 'Growth Opportunities', description: 'Continuous learning and career development programs' },
@@ -182,7 +212,10 @@ const Careers = () => {
                       </div>
                     </div>
                     <div className="mt-6 md:mt-8 flex flex-col md:flex-row gap-4">
-                      <button className="bg-primary text-white px-8 py-3 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors">
+                      <button
+                        onClick={() => openApplyForm(job)}
+                        className="bg-primary text-white px-8 py-3 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors"
+                      >
                         Apply Now
                       </button>
                       <button className="bg-transparent border-[1.5px] border-primary text-primary px-8 py-3 rounded-[19px] text-base font-normal hover:bg-primary hover:text-white transition-colors">
@@ -203,12 +236,127 @@ const Careers = () => {
             <p className="text-base md:text-lg font-normal text-dark mb-6 max-w-[600px] mx-auto tracking-[0.05em]">
               We're always looking for talented people. Send us your resume and we'll reach out when a suitable position opens up.
             </p>
-            <button className="bg-primary text-white px-8 py-3.5 rounded-[19px] text-base md:text-lg font-bold hover:bg-blue-700 transition-colors">
+            <button
+              onClick={() => openApplyForm('general')}
+              className="bg-primary text-white px-8 py-3.5 rounded-[19px] text-base md:text-lg font-bold hover:bg-blue-700 transition-colors"
+            >
               Send General Application
             </button>
           </div>
         </div>
       </section>
+
+      {/* Toast */}
+      {toast && (
+        <div className={`fixed top-24 right-6 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium transition-all duration-300 ${
+          toast.type === 'error' ? 'bg-red-500' : 'bg-green-500'
+        }`}>
+          {toast.message}
+        </div>
+      )}
+
+      {/* Apply Modal */}
+      {applyingFor && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setApplyingFor(null)}>
+          <div className="bg-white rounded-[20px] shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 md:p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-xl font-bold text-dark tracking-[0.05em]" style={{ fontFamily: 'Century Gothic, sans-serif' }}>
+                    {applyingFor === 'general' ? 'General Application' : `Apply for ${applyingFor.title}`}
+                  </h3>
+                  {applyingFor !== 'general' && (
+                    <p className="text-sm text-gray-500 mt-1">{applyingFor.department} · {applyingFor.location}</p>
+                  )}
+                </div>
+                <button onClick={() => setApplyingFor(null)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+              </div>
+
+              <form onSubmit={handleApply} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-bold text-dark mb-1.5">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={appForm.name}
+                    onChange={(e) => setAppForm(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Enter your full name"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-dark mb-1.5">Email *</label>
+                    <input
+                      type="email"
+                      required
+                      value={appForm.email}
+                      onChange={(e) => setAppForm(prev => ({ ...prev, email: e.target.value }))}
+                      placeholder="your@email.com"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-dark mb-1.5">Phone *</label>
+                    <input
+                      type="tel"
+                      required
+                      value={appForm.phone}
+                      onChange={(e) => setAppForm(prev => ({ ...prev, phone: e.target.value }))}
+                      placeholder="+91 XXXXXXXXXX"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-dark mb-1.5">Years of Experience</label>
+                  <input
+                    type="text"
+                    value={appForm.experience}
+                    onChange={(e) => setAppForm(prev => ({ ...prev, experience: e.target.value }))}
+                    placeholder="e.g., 3 years"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-dark mb-1.5">Cover Letter / Message *</label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={appForm.coverLetter}
+                    onChange={(e) => setAppForm(prev => ({ ...prev, coverLetter: e.target.value }))}
+                    placeholder="Tell us about yourself, your skills, and why you'd be a great fit..."
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                  />
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setApplyingFor(null)}
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-[19px] transition-colors text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="flex-1 bg-primary hover:bg-blue-700 text-white font-bold py-3 rounded-[19px] transition-colors text-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {submitting ? (
+                      <>
+                        <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      'Submit Application'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

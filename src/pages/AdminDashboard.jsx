@@ -6,9 +6,11 @@ import { getBlogs } from '../data/blogsData';
 import { getProjects } from '../data/projectsData';
 import { getSettings, updateSettings, resetSettings } from '../data/siteSettings';
 import { getCredentials, updateCredentials } from '../data/adminAuth';
+import { getApplications } from '../data/applicationsData';
+import { getMessages } from '../data/messagesData';
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({ projects: 0, blogs: 0, gallery: 0, positions: 0 });
+  const [stats, setStats] = useState({ projects: 0, blogs: 0, gallery: 0, positions: 0, applications: 0, messages: 0 });
   const [settings, setSettings] = useState(getSettings());
   const [editingSettings, setEditingSettings] = useState(false);
   const [settingsForm, setSettingsForm] = useState({});
@@ -27,6 +29,8 @@ const AdminDashboard = () => {
       blogs: getBlogs().length,
       gallery: getGalleryItems().length,
       positions: getPositions().length,
+      applications: getApplications().length,
+      messages: getMessages().filter(m => m.status === 'unread').length,
     });
   };
 
@@ -113,6 +117,22 @@ const AdminDashboard = () => {
       color: 'from-purple-400 to-pink-500',
       description: 'Post & manage job openings',
     },
+    {
+      title: 'Applications',
+      path: '/admin/applications',
+      icon: '✉',
+      count: stats.applications,
+      color: 'from-rose-400 to-red-500',
+      description: 'Review job applications from candidates',
+    },
+    {
+      title: 'Messages',
+      path: '/admin/messages',
+      icon: '💬',
+      count: stats.messages,
+      color: 'from-cyan-400 to-blue-500',
+      description: 'Contact form submissions & inquiries',
+    },
   ];
 
   const statCards = [
@@ -120,6 +140,8 @@ const AdminDashboard = () => {
     { label: 'Blog Posts', value: stats.blogs, icon: '✎', bg: 'bg-blue-50 text-blue-700' },
     { label: 'Gallery Items', value: stats.gallery, icon: '▦', bg: 'bg-emerald-50 text-emerald-700' },
     { label: 'Open Positions', value: stats.positions, icon: '⚑', bg: 'bg-purple-50 text-purple-700' },
+    { label: 'Applications', value: stats.applications, icon: '✉', bg: 'bg-rose-50 text-rose-700' },
+    { label: 'Unread Messages', value: stats.messages, icon: '💬', bg: 'bg-cyan-50 text-cyan-700' },
   ];
 
   return (
@@ -142,7 +164,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* ─── Stats Grid ─── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {statCards.map((card) => (
           <div key={card.label} className="bg-white rounded-[20px] shadow-card p-5 flex items-center gap-4">
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${card.bg}`}>
@@ -161,7 +183,7 @@ const AdminDashboard = () => {
         <h2 className="text-lg font-bold text-dark mb-4 tracking-[0.05em]" style={{ fontFamily: 'Century Gothic, sans-serif' }}>
           Manage Sections
         </h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {adminSections.map((section) => (
             <Link
               key={section.path}

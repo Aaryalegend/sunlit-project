@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getBlogs } from '../data/blogsData';
 
 const Blogs = () => {
@@ -90,9 +91,9 @@ const Blogs = () => {
                     <p className="text-xs text-gray-500">{featuredBlog.date}</p>
                   </div>
                 </div>
-                <button className="bg-primary text-white px-6 py-2.5 rounded-[19px] text-sm font-bold hover:bg-blue-700 transition-colors">
+                <Link to={`/blogs/${featuredBlog.id}`} className="bg-primary text-white px-6 py-2.5 rounded-[19px] text-sm font-bold hover:bg-blue-700 transition-colors">
                   Read More
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -126,9 +127,10 @@ const Blogs = () => {
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {filteredBlogs.map((blog) => (
-              <div 
+              <Link 
+                to={`/blogs/${blog.id}`}
                 key={blog.id}
-                className="bg-white rounded-[20px] shadow-card hover:shadow-xl transition-all hover:-translate-y-2 duration-300 overflow-hidden group cursor-pointer"
+                className="bg-white rounded-[20px] shadow-card hover:shadow-xl transition-all hover:-translate-y-2 duration-300 overflow-hidden group cursor-pointer block"
               >
                 {/* Blog Image */}
                 <div className="w-full h-[180px] md:h-[200px] bg-gradient-to-br from-[#1976D2] to-[#0d47a1] relative overflow-hidden">
@@ -172,7 +174,7 @@ const Blogs = () => {
                     <span className="text-primary font-bold text-sm group-hover:underline">Read →</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

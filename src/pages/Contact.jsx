@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { addMessage } from '../data/messagesData';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const Contact = () => {
     message: '',
     service: ''
   });
+  const [toast, setToast] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,8 +19,14 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '', service: '' });
+    setSubmitting(true);
+    setTimeout(() => {
+      addMessage(formData);
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '', service: '' });
+      setSubmitting(false);
+      setToast({ message: 'Thank you for your message! We will get back to you soon.', type: 'success' });
+      setTimeout(() => setToast(null), 4000);
+    }, 800);
   };
 
   const contactInfo = [
@@ -63,6 +72,15 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Toast */}
+      {toast && (
+        <div className={`fixed top-24 right-6 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium transition-all duration-300 ${
+          toast.type === 'error' ? 'bg-red-500' : 'bg-green-500'
+        }`}>
+          {toast.message}
+        </div>
+      )}
+
       {/* Hero Banner */}
       <section className="relative w-full h-[300px] md:h-[400px]">
         <div className="absolute inset-0 bg-gradient-to-r from-[#02203E] to-[#1976D2]"></div>
@@ -207,9 +225,17 @@ const Contact = () => {
 
                 <button 
                   type="submit"
-                  className="w-full bg-primary text-white py-3.5 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors tracking-[0.05em]"
+                  disabled={submitting}
+                  className="w-full bg-primary text-white py-3.5 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors tracking-[0.05em] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Send Message
+                  {submitting ? (
+                    <>
+                      <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    'Send Message'
+                  )}
                 </button>
               </form>
             </div>
