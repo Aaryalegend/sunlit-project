@@ -155,7 +155,7 @@ const AdminLayout = ({ children }) => {
   return (
     <div className="min-h-[80vh]">
       {/* Admin Top Bar */}
-      <div className="bg-gradient-to-r from-primary to-blue-700 text-white shadow-lg sticky top-[67px] md:top-[79px] z-40">
+      <div className="bg-gradient-to-r from-primary to-blue-700 text-white shadow-lg sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
             {/* Left: Links */}
