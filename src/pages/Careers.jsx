@@ -70,7 +70,7 @@ const Careers = () => {
       </section>
 
       {/* Why Work With Us */}
-      <section className="w-full py-12 md:py-20 px-4 md:px-20">
+      {/* <section className="w-full py-12 md:py-20 px-4 md:px-20">
         <div className="max-w-[1280px] mx-auto">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-[32px] md:text-[48px] font-bold text-primary mb-2 md:mb-4">
@@ -96,7 +96,7 @@ const Careers = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Culture Section */}
       <section className="w-full bg-lightBlue py-12 md:py-20 px-4 md:px-20">
@@ -217,9 +217,6 @@ const Careers = () => {
                         className="bg-primary text-white px-8 py-3 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors"
                       >
                         Apply Now
-                      </button>
-                      <button className="bg-transparent border-[1.5px] border-primary text-primary px-8 py-3 rounded-[19px] text-base font-normal hover:bg-primary hover:text-white transition-colors">
-                        Share Position
                       </button>
                     </div>
                   </div>

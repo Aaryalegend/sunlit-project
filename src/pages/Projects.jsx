@@ -39,7 +39,6 @@ const Projects = () => {
               { number: '200+', label: 'Projects Completed' },
               { number: '5MW+', label: 'Total Capacity' },
               { number: '15+', label: 'Cities Covered' },
-              { number: '98%', label: 'Client Satisfaction' },
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <h3 className="text-[32px] md:text-[48px] font-bold text-white mb-1 md:mb-2">

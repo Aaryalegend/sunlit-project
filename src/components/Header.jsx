@@ -18,12 +18,15 @@ const Header = () => {
       </div>
 
       {/* Content */}
-      <div className="relative max-w-[1280px] mx-auto px-4 md:px-[90px] h-full flex flex-col justify-center">
+      <div className="relative w-full px-4 md:px-20 h-full flex flex-col justify-center">
+        <p className="text-[22px] md:text-[48px]  text-white mb-4">
+          Solar Energy is the primary energy on Earth
+        </p>
         <h1 className="text-[28px] md:text-[64px] font-bold leading-[1.3] md:leading-[1.23] tracking-[0.05em] text-lightBlue mb-4 md:mb-6">
           Journey With Energy Powered by Sun Lit Tech
         </h1>
         
-        <p className="text-base md:text-2xl font-normal leading-[1.4] md:leading-[1.23] tracking-[0.05em] text-white mb-6 md:mb-8 max-w-[634px]">
+        <p className="text-base md:text-2xl font-normal leading-[1.4] md:leading-[1.23] tracking-[0.05em] text-white mb-6 md:mb-8">
           More Than a Solar Project, A Shared Commitment
         </p>
 

@@ -5,7 +5,6 @@ const StatsSection = () => {
     { number: '7+', label: 'Years of Experience' },
     { number: '5MW+', label: 'Installed Capacity' },
     { number: '200+', label: 'Projects Complete' },
-    { number: '98%', label: 'Customer Satisfaction' },
   ];
 
   return (

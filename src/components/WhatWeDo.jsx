@@ -24,13 +24,18 @@ const WhatWeDo = () => {
     },
     {
       image: require('../assets/service-5.svg'),
-      title: 'Solar Rooftop Systems',
+      title: 'Open-access Solar Parks',
       description: 'Residential and commercial rooftop solar panel installations.'
     },
     {
       image: require('../assets/service-6.svg'),
       title: 'O&M Services',
       description: 'Comprehensive operation and maintenance for optimal performance.'
+    },
+    {
+      image: require('../assets/service-6.svg'),
+      title: 'HT & LT Cabling and Installations',
+      description: 'Electrical Infrastructure with Sanctioning HT & LT Cabling and Installations.'
     }
   ];
 

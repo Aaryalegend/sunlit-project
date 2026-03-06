@@ -5,6 +5,7 @@ import { getBlogs } from '../data/blogsData';
 const Blogs = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [allBlogs, setAllBlogs] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(3);
 
   const categories = ['All', 'Solar Energy', 'Technology', 'Sustainability', 'Industry News'];
 
@@ -18,6 +19,9 @@ const Blogs = () => {
   const filteredBlogs = activeCategory === 'All' 
     ? blogs 
     : blogs.filter(b => b.category === activeCategory);
+
+  const visibleBlogs = filteredBlogs.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredBlogs.length;
 
   const getCategoryColor = (category) => {
     switch(category) {
@@ -108,7 +112,7 @@ const Blogs = () => {
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setActiveCategory(category)}
+                onClick={() => { setActiveCategory(category); setVisibleCount(3); }}
                 className={`px-5 md:px-8 py-2 md:py-3 rounded-[19px] text-sm md:text-base font-bold tracking-[0.05em] transition-all duration-300 ${
                   activeCategory === category
                     ? 'bg-primary text-white shadow-card'
@@ -126,7 +130,7 @@ const Blogs = () => {
       <section className="w-full pb-12 md:pb-20 px-4 md:px-20">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {filteredBlogs.map((blog) => (
+            {visibleBlogs.map((blog) => (
               <Link 
                 to={`/blogs/${blog.id}`}
                 key={blog.id}
@@ -177,30 +181,164 @@ const Blogs = () => {
               </Link>
             ))}
           </div>
+          {hasMore && (
+            <div className="flex justify-center mt-10">
+              <button
+                onClick={() => setVisibleCount(prev => prev + 3)}
+                className="bg-primary text-white px-10 py-3.5 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors"
+              >
+                View More
+              </button>
+            </div>
+          )}
+          {!hasMore && visibleCount > 3 && (
+            <div className="flex justify-center mt-10">
+              <button
+                onClick={() => setVisibleCount(3)}
+                className="bg-transparent border-2 border-primary text-primary px-10 py-3.5 rounded-[19px] text-base font-bold hover:bg-primary hover:text-white transition-colors"
+              >
+                View Less
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Newsletter CTA */}
-      <section className="w-full bg-lightBlue py-12 md:py-20">
-        <div className="max-w-[1280px] mx-auto px-4 md:px-20 text-center">
-          <h2 className="text-[28px] md:text-[48px] font-bold text-primary mb-4 leading-tight">
-            Stay Updated
-          </h2>
-          <p className="text-base md:text-xl font-normal text-dark mb-8 max-w-[600px] mx-auto tracking-[0.05em]">
-            Subscribe to our newsletter and get the latest solar energy insights delivered to your inbox.
-          </p>
-          <div className="flex flex-col md:flex-row gap-4 max-w-[600px] mx-auto">
-            <input 
-              type="email" 
-              placeholder="Enter your email address"
-              className="flex-1 px-6 py-3.5 rounded-[19px] border border-gray-200 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20"
-            />
-            <button className="bg-primary text-white px-8 py-3.5 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors whitespace-nowrap">
-              Subscribe
-            </button>
+      {/* Opportunity Section */}
+      <section className="w-full bg-[#E6F2FF] py-12 md:py-16 px-4 md:px-12">
+        <div className="max-w-[1280px] mx-auto">
+          <div className="flex flex-col md:flex-row gap-10 md:gap-12">
+
+            {/* Left: Solar Potential in India */}
+            <div className="flex-1 flex flex-col justify-center gap-6">
+              <p className="text-[20px] md:text-[24px] font-normal text-primary tracking-[0.05em]">
+                Opportunity
+              </p>
+              <h3 className="text-[24px] md:text-[32px] font-bold text-dark leading-tight tracking-[0.05em]">
+                Solar Potential in India
+              </h3>
+              <p className="text-base md:text-[20px] font-normal text-dark leading-snug tracking-[0.05em]">
+                India offers one of the world's most favourable environments for solar energy generation, making solar PV a strong long-term solution.
+              </p>
+              <ul className="flex flex-col gap-3 mt-2">
+                {[
+                  'Average solar radiation of 4-7 kWh/m²/day',
+                  'Over 330 sunny days annually',
+                  'Clean energy reducing carbon emissions',
+                  'Proven technology with 25+ years lifespan',
+                  'Attractive government incentives and policies',
+                ].map((point, i) => (
+                  <li key={i} className="text-sm md:text-base font-bold text-dark tracking-[0.05em]">
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Right: two white cards */}
+            <div className="flex-1 flex flex-col gap-4">
+
+              {/* Card 1: Investment Protection */}
+              <div className="bg-white rounded-[20px] shadow-[0px_0px_6.9px_1px_rgba(0,0,0,0.1)] border border-[rgba(102,102,102,0.5)] p-6">
+                <h4 className="text-[18px] md:text-[20px] font-bold text-dark text-center tracking-[0.05em] mb-4">
+                  Investment Protection
+                </h4>
+                <ul className="flex flex-col gap-2 list-disc pl-5">
+                  {[
+                    'Project insurance covering natural disasters and theft',
+                    'Third-party insurance for high-value equipment and human life',
+                    'Minimum generation guarantees for assured performance',
+                    'Detailed resource assessment and feasibility analysis',
+                  ].map((point, i) => (
+                    <li key={i} className="text-sm md:text-base font-normal text-dark leading-relaxed tracking-[0.05em]">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Card 2: Revenue & Returns */}
+              <div className="bg-white rounded-[20px] shadow-[0px_0px_6.9px_1px_rgba(0,0,0,0.1)] border border-[rgba(102,102,102,0.5)] p-6">
+                <h4 className="text-[18px] md:text-[20px] font-bold text-dark text-center tracking-[0.05em] mb-4">
+                  Revenue &amp; Returns
+                </h4>
+                <ul className="flex flex-col gap-2 list-disc pl-5">
+                  {[
+                    'Power sales through DISCOM PPAs and third-party open access',
+                    'Eligibility for Renewable Energy Certificates (RECs) and Carbon Credits',
+                    'Annual generation potential of 13.5-19 lakh units per MW',
+                    'Accelerated Depreciation (80%) and tax benefits',
+                    'Long-term land value appreciation',
+                  ].map((point, i) => (
+                    <li key={i} className="text-sm md:text-base font-normal text-dark leading-relaxed tracking-[0.05em]">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
+
+      {/* End-to-End Project Support Section */}
+      <section className="w-full bg-white py-12 md:py-16 px-4 md:px-12">
+        <div className="max-w-[1280px] mx-auto">
+          <p className="text-[20px] md:text-[24px] font-normal text-primary tracking-[0.05em] mb-2">
+            Support
+          </p>
+          <h3 className="text-[24px] md:text-[32px] font-bold text-dark tracking-[0.05em] mb-8">
+            End-to-End Project Support
+          </h3>
+          <div className="flex flex-col gap-3">
+            {[
+              'Land procurement and statutory approvals',
+              'Registrations with MNRE, nodal agencies, and utilities',
+              'Facilitation of open-access PPAs, RECs, and carbon credits',
+              'Assistance with project financing and soft loans',
+              'Execution by an experienced professional team',
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="bg-[#E6F2FF] rounded-[14px] px-4 py-3"
+              >
+                <span className="text-sm md:text-base font-normal text-dark tracking-[0.05em]">
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Operations & Maintenance Section */}
+      <section className="w-full bg-[#E6F2FF] py-12 md:py-16 px-4 md:px-12">
+        <div className="max-w-[1280px] mx-auto">
+          <p className="text-[20px] md:text-[24px] font-normal text-primary tracking-[0.05em] mb-2">
+            Maintenance
+          </p>
+          <h3 className="text-[24px] md:text-[32px] font-bold text-dark tracking-[0.05em] mb-8">
+            Operations &amp; Maintenance
+          </h3>
+          <div className="flex flex-col gap-3">
+            {[
+              'Secure real-time monitoring of power generation',
+              'Preventive and corrective maintenance programs',
+              'Performance optimization for maximum energy yield',
+              '24×7 system surveillance and support',
+            ].map((item, i) => (
+              <div key={i} className="bg-white rounded-[14px] px-4 py-3">
+                <span className="text-sm md:text-base font-normal text-dark tracking-[0.05em]">
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      
     </div>
   );
 };

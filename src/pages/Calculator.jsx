@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
 
+const STATE_SUN_HOURS = {
+  'Rajasthan': 5.5, 'Gujarat': 5.3, 'Madhya Pradesh': 5.2, 'Andhra Pradesh': 5.2,
+  'Telangana': 5.3, 'Tamil Nadu': 5.1, 'Karnataka': 5.0, 'Maharashtra': 5.0,
+  'Odisha': 4.9, 'Delhi': 4.9, 'Haryana': 4.8, 'Uttar Pradesh': 4.8,
+  'Punjab': 4.7, 'Bihar': 4.7, 'West Bengal': 4.6, 'Assam': 4.5,
+  'Himachal Pradesh': 4.8, 'Uttarakhand': 4.7, 'Jharkhand': 4.7,
+  'Chhattisgarh': 5.0, 'Kerala': 4.6, 'Goa': 4.8, 'Other': 5.0,
+};
+
+const ELECTRICITY_RATES = {
+  Residential: 7, Commercial: 9, Institutional: 8, Industrial: 6.5,
+};
+
 const Calculator = () => {
   const [formData, setFormData] = useState({
-    monthlyBill: '',
+    state: 'Maharashtra',
+    category: 'Residential',
+    monthlyUnits: '',
     roofArea: '',
-    location: 'Pune',
-    roofType: 'flat',
-    electricityRate: 8,
-    systemType: 'on-grid'
+    requiredCapacity: '',
+    sanctionLoad: '',
   });
 
   const [results, setResults] = useState(null);
@@ -18,41 +31,62 @@ const Calculator = () => {
 
   const calculateSavings = (e) => {
     e.preventDefault();
-    
-    const monthlyBill = parseFloat(formData.monthlyBill) || 0;
+
+    const sunHours = STATE_SUN_HOURS[formData.state] || 5.0;
+    const electricityRate = ELECTRICITY_RATES[formData.category] || 7;
+    const monthlyUnits = parseFloat(formData.monthlyUnits) || 0;
     const roofArea = parseFloat(formData.roofArea) || 0;
-    const electricityRate = parseFloat(formData.electricityRate) || 8;
+    const requiredCapacity = parseFloat(formData.requiredCapacity) || 0;
+    const sanctionLoad = parseFloat(formData.sanctionLoad) || 0;
 
-    // Calculate system size based on monthly bill
-    const monthlyConsumption = monthlyBill / electricityRate; // kWh
-    const dailyConsumption = monthlyConsumption / 30;
-    const systemSizeFromBill = dailyConsumption / 4; // Assuming 4 peak sun hours
+    // System size from consumption
+    const dailyUnits = monthlyUnits / 30;
+    const sizeFromConsumption = dailyUnits / sunHours;
 
-    // Calculate system size based on roof area (1 kW per 100 sq ft)
-    const systemSizeFromRoof = roofArea / 100;
+    // System size from rooftop (100 sq ft per kW)
+    const sizeFromRoof = roofArea > 0 ? roofArea / 100 : Infinity;
 
-    // Use the smaller of the two
-    const recommendedSize = Math.min(systemSizeFromBill, systemSizeFromRoof || systemSizeFromBill);
-    const roundedSize = Math.max(1, Math.ceil(recommendedSize));
+    // System size from sanction load (typically 80% of sanction load)
+    const sizeFromSanction = sanctionLoad > 0 ? sanctionLoad * 0.8 : Infinity;
 
-    // Calculations
-    const costPerKW = 55000; // ₹55,000 per kW (average)
-    const totalCost = roundedSize * costPerKW;
-    const annualGeneration = roundedSize * 4 * 365; // kWh
-    const monthlySavings = (annualGeneration / 12) * electricityRate;
-    const annualSavings = annualGeneration * electricityRate;
-    const paybackPeriod = totalCost / annualSavings;
-    const co2Reduction = roundedSize * 1.0; // tons per year per kW
-    const treesEquivalent = roundedSize * 2;
-    const roi25Years = (annualSavings * 25) - totalCost;
+    // Start from required capacity or consumption-based size
+    let baseSize = requiredCapacity > 0 ? requiredCapacity : sizeFromConsumption;
 
-    // Government subsidy (for residential)
+    // Apply constraints
+    const recommendedSize = Math.min(
+      baseSize,
+      sizeFromRoof === Infinity ? baseSize : sizeFromRoof,
+      sizeFromSanction === Infinity ? baseSize : sizeFromSanction
+    );
+
+    const roundedSize = Math.max(1, parseFloat(recommendedSize.toFixed(1)));
+
+    // Costing
+    const costPerKW = formData.category === 'Residential' ? 55000
+      : formData.category === 'Commercial' ? 50000
+      : formData.category === 'Industrial' ? 45000 : 52000;
+
+    const totalCost = Math.round(roundedSize * costPerKW);
+    const annualGeneration = Math.round(roundedSize * sunHours * 365);
+    const monthlySavings = Math.round((annualGeneration / 12) * electricityRate);
+    const annualSavings = Math.round(annualGeneration * electricityRate);
+    const paybackPeriod = (totalCost / annualSavings).toFixed(1);
+    const co2Reduction = (roundedSize * 1.0).toFixed(1);
+    const treesEquivalent = Math.round(roundedSize * 2);
+    const roi25Years = Math.round(annualSavings * 25 - totalCost);
+
+    // PM Surya Ghar subsidy (Residential only)
     let subsidy = 0;
-    if (roundedSize <= 3) {
-      subsidy = roundedSize * 14588;
-    } else if (roundedSize <= 10) {
-      subsidy = 3 * 14588 + (roundedSize - 3) * 7294;
+    if (formData.category === 'Residential') {
+      if (roundedSize <= 2) {
+        subsidy = Math.round(roundedSize * 30000);
+      } else if (roundedSize <= 3) {
+        subsidy = 60000 + Math.round((roundedSize - 2) * 18000);
+      } else {
+        subsidy = 78000;
+      }
     }
+
     const costAfterSubsidy = totalCost - subsidy;
 
     setResults({
@@ -60,19 +94,19 @@ const Calculator = () => {
       totalCost,
       subsidy,
       costAfterSubsidy,
-      monthlySavings: Math.round(monthlySavings),
-      annualSavings: Math.round(annualSavings),
-      paybackPeriod: paybackPeriod.toFixed(1),
-      annualGeneration: Math.round(annualGeneration),
-      co2Reduction: co2Reduction.toFixed(1),
-      treesEquivalent: Math.round(treesEquivalent),
-      roi25Years: Math.round(roi25Years),
+      monthlySavings,
+      annualSavings,
+      paybackPeriod,
+      annualGeneration,
+      co2Reduction,
+      treesEquivalent,
+      roi25Years,
+      electricityRate,
+      sunHours,
     });
   };
 
-  const formatCurrency = (num) => {
-    return '₹' + num.toLocaleString('en-IN');
-  };
+  const formatCurrency = (num) => '₹' + num.toLocaleString('en-IN');
 
   return (
     <div className="min-h-screen">
@@ -103,27 +137,68 @@ const Calculator = () => {
               </p>
 
               <form onSubmit={calculateSavings} className="space-y-6">
+
+                {/* State */}
+                <div>
+                  <label className="block text-sm font-bold text-dark mb-2">Your State *</label>
+                  <select
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3.5 rounded-[12px] border border-gray-200 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all bg-white"
+                  >
+                    {Object.keys(STATE_SUN_HOURS).map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block text-sm font-bold text-dark mb-2">Your Category *</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {['Residential', 'Commercial', 'Institutional', 'Industrial'].map((cat) => (
+                      <button
+                        key={cat}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, category: cat })}
+                        className={`px-4 py-3 rounded-[12px] text-sm font-bold transition-all ${
+                          formData.category === cat
+                            ? 'bg-primary text-white'
+                            : 'bg-lightBlue text-primary hover:bg-primary hover:text-white'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Monthly Units */}
                 <div>
                   <label className="block text-sm font-bold text-dark mb-2">
-                    Monthly Electricity Bill (₹) *
+                    Average Monthly Consumption (kWh) *
                   </label>
-                  <input 
+                  <input
                     type="number"
-                    name="monthlyBill"
-                    value={formData.monthlyBill}
+                    name="monthlyUnits"
+                    value={formData.monthlyUnits}
                     onChange={handleChange}
                     required
                     min="0"
-                    placeholder="e.g., 5000"
+                    placeholder="e.g., 500"
                     className="w-full px-4 py-3.5 rounded-[12px] border border-gray-200 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Check your electricity bill for monthly units consumed</p>
                 </div>
 
+                {/* Roof Area */}
                 <div>
                   <label className="block text-sm font-bold text-dark mb-2">
-                    Available Roof Area (sq. ft.)
+                    Total Available Rooftop Area (sq. ft.)
                   </label>
-                  <input 
+                  <input
                     type="number"
                     name="roofArea"
                     value={formData.roofArea}
@@ -132,100 +207,46 @@ const Calculator = () => {
                     placeholder="e.g., 500"
                     className="w-full px-4 py-3.5 rounded-[12px] border border-gray-200 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Approx. 100 sq. ft. per 1 kW</p>
+                  <p className="text-xs text-gray-500 mt-1">Approx. 100 sq. ft. required per 1 kW</p>
                 </div>
 
+                {/* Required Capacity */}
                 <div>
                   <label className="block text-sm font-bold text-dark mb-2">
-                    Location
+                    Required Solar Plant Capacity (kW) <span className="font-normal text-gray-500">(optional)</span>
                   </label>
-                  <select 
-                    name="location"
-                    value={formData.location}
+                  <input
+                    type="number"
+                    name="requiredCapacity"
+                    value={formData.requiredCapacity}
                     onChange={handleChange}
-                    className="w-full px-4 py-3.5 rounded-[12px] border border-gray-200 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all bg-white"
-                  >
-                    <option value="Pune">Pune</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Nagpur">Nagpur</option>
-                    <option value="Nashik">Nashik</option>
-                    <option value="Aurangabad">Aurangabad</option>
-                    <option value="Other">Other (Maharashtra)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-dark mb-2">
-                    Roof Type
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { value: 'flat', label: 'Flat Roof' },
-                      { value: 'tilted', label: 'Tilted Roof' },
-                    ].map((type) => (
-                      <button
-                        key={type.value}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, roofType: type.value })}
-                        className={`px-4 py-3 rounded-[12px] text-sm font-bold transition-all ${
-                          formData.roofType === type.value
-                            ? 'bg-primary text-white'
-                            : 'bg-lightBlue text-primary hover:bg-primary hover:text-white'
-                        }`}
-                      >
-                        {type.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-dark mb-2">
-                    System Type
-                  </label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { value: 'on-grid', label: 'On-Grid' },
-                      { value: 'off-grid', label: 'Off-Grid' },
-                      { value: 'hybrid', label: 'Hybrid' },
-                    ].map((type) => (
-                      <button
-                        key={type.value}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, systemType: type.value })}
-                        className={`px-3 py-3 rounded-[12px] text-sm font-bold transition-all ${
-                          formData.systemType === type.value
-                            ? 'bg-primary text-white'
-                            : 'bg-lightBlue text-primary hover:bg-primary hover:text-white'
-                        }`}
-                      >
-                        {type.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-dark mb-2">
-                    Electricity Rate (₹/unit): {formData.electricityRate}
-                  </label>
-                  <input 
-                    type="range"
-                    name="electricityRate"
-                    value={formData.electricityRate}
-                    onChange={handleChange}
-                    min="4"
-                    max="15"
-                    step="0.5"
-                    className="w-full h-2 bg-lightBlue rounded-lg appearance-none cursor-pointer accent-primary"
+                    min="0"
+                    step="0.1"
+                    placeholder="e.g., 5"
+                    className="w-full px-4 py-3.5 rounded-[12px] border border-gray-200 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all"
                   />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>₹4/unit</span>
-                    <span>₹15/unit</span>
-                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Leave blank to auto-calculate based on consumption</p>
                 </div>
 
-                <button 
+                {/* Sanction Load */}
+                <div>
+                  <label className="block text-sm font-bold text-dark mb-2">
+                    Sanctioned Load (kW) <span className="font-normal text-gray-500">(optional)</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="sanctionLoad"
+                    value={formData.sanctionLoad}
+                    onChange={handleChange}
+                    min="0"
+                    step="0.5"
+                    placeholder="e.g., 10"
+                    className="w-full px-4 py-3.5 rounded-[12px] border border-gray-200 text-base focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Solar capacity is limited to 80% of sanctioned load</p>
+                </div>
+
+                <button
                   type="submit"
                   className="w-full bg-primary text-white py-4 rounded-[19px] text-base md:text-lg font-bold hover:bg-blue-700 transition-colors tracking-[0.05em]"
                 >
@@ -259,7 +280,7 @@ const Calculator = () => {
                       {results.systemSize} kW
                     </h3>
                     <p className="text-sm text-lightBlue tracking-[0.05em]">
-                      {formData.systemType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} System
+                      {formData.category} · {formData.state} · {results.sunHours} sun hrs/day
                     </p>
                   </div>
 
@@ -270,8 +291,13 @@ const Calculator = () => {
                       <p className="text-lg md:text-2xl font-bold text-dark">{formatCurrency(results.totalCost)}</p>
                     </div>
                     <div className="bg-white rounded-[20px] p-5 md:p-6 shadow-card text-center">
-                      <p className="text-xs md:text-sm text-gray-500 mb-1">Govt. Subsidy</p>
+                      <p className="text-xs md:text-sm text-gray-500 mb-1">
+                        {formData.category === 'Residential' ? 'PM Surya Ghar Subsidy' : 'Govt. Subsidy'}
+                      </p>
                       <p className="text-lg md:text-2xl font-bold text-green-600">{formatCurrency(results.subsidy)}</p>
+                      {formData.category !== 'Residential' && (
+                        <p className="text-xs text-gray-400 mt-1">N/A for {formData.category}</p>
+                      )}
                     </div>
                   </div>
 
@@ -285,6 +311,10 @@ const Calculator = () => {
                   <div className="bg-white rounded-[20px] p-5 md:p-6 shadow-card">
                     <h4 className="text-lg font-bold text-dark mb-4">Savings Breakdown</h4>
                     <div className="space-y-3">
+                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                        <span className="text-sm text-dark">Electricity Rate Used</span>
+                        <span className="text-base font-bold text-primary">₹{results.electricityRate}/unit</span>
+                      </div>
                       <div className="flex justify-between items-center py-2 border-b border-gray-100">
                         <span className="text-sm text-dark">Monthly Savings</span>
                         <span className="text-base font-bold text-primary">{formatCurrency(results.monthlySavings)}</span>

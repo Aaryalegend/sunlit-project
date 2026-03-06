@@ -9,7 +9,7 @@ const Navigation = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full bg-white px-4 md:px-7 py-4 md:py-6 shadow-md z-50">
-      <div className="max-w-[1280px] mx-auto flex justify-between items-center">
+      <div className="w-full flex justify-between items-center">
         {/* Logo */}
         <div className="w-[100px] h-[35px] md:w-[133px] md:h-[47px]">
           <Link to="/">

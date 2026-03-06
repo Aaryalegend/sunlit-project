@@ -6,27 +6,27 @@ const WhyGoSolar = () => {
       icon: require('../assets/leaf-icon.png'),
       title: 'Environmental Impact',
       points: [
-        '1 kW reduces ~1 ton CO₂ annually',
-        'Equivalent to planting 2 trees per year',
-        'Clean, sustainable energy generation'
+        '1 kW reduces ~1 ton CO₂ annually.',
+        'Equivalent to planting 2 trees per year.',
+        'Clean, sustainable energy generation.'
       ]
     },
     {
       icon: require('../assets/leaf-icon.png'),
       title: 'Cost Savings',
       points: [
-        'Reduce electricity bills by up to 90%',
-        'Protection against rising energy costs',
-        'Government subsidies and incentives available'
+        'Reduce electricity bills by up to 90%.',
+        'Protection against rising energy costs.',
+        'Government subsidies and incentives available.'
       ]
     },
     {
       icon: require('../assets/leaf-icon.png'),
       title: 'Energy Independence',
       points: [
-        'Generate your own clean power',
-        'Reduce dependency on grid electricity',
-        'Reliable power supply with battery backup'
+        'Generate your own clean power.',
+        'Reduce dependency on grid electricity.',
+        'Reliable power supply with battery backup.'
       ]
     }
   ];
@@ -52,7 +52,7 @@ const WhyGoSolar = () => {
               className="bg-white rounded-[20px] p-6 md:p-8 shadow-card hover:shadow-xl transition-shadow"
             >
               {/* Icon */}
-              <div className="mb-4 md:mb-6">
+              <div className="mb-4 md:mb-6 flex justify-center">
                 <img 
                   src={benefit.icon} 
                   alt={benefit.title}
@@ -69,9 +69,9 @@ const WhyGoSolar = () => {
               </h4>
 
               {/* Points */}
-              <ul className="space-y-2 md:space-y-3">
+              <ul className="space-y-2 md:space-y-3 list-none">
                 {benefit.points.map((point, idx) => (
-                  <li key={idx} className="text-sm md:text-base font-normal text-dark leading-6 md:leading-7 tracking-[0.05em]">
+                  <li key={idx} className="text-sm md:text-base font-normal text-dark leading-6 md:leading-7 tracking-[0.05em] text-center">
                     {point}
                   </li>
                 ))}

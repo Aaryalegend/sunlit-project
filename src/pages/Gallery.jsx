@@ -129,7 +129,7 @@ const Gallery = () => {
         </div>
       )}
 
-      {/* Stats section */}
+      {/* Stats section
       <section className="w-full bg-primary py-10 md:py-16">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
           <div className="text-center mb-10">
@@ -149,7 +149,7 @@ const Gallery = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
