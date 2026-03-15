@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative w-full h-[500px] md:h-[778px]">
       {/* Background Image */}
@@ -32,10 +34,14 @@ const Header = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col md:flex-row gap-4 md:gap-10">
-          <button className="bg-primary text-white px-6 py-4 md:py-6 rounded-[19px] text-base md:text-2xl font-normal tracking-[0.05em] hover:bg-blue-700 transition-colors w-full md:w-auto md:min-w-[327px]">
+          <button 
+            onClick={() => navigate('/contact')}
+            className="bg-primary text-white px-5 py-3 md:py-4 rounded-[14px] text-sm md:text-lg font-normal tracking-[0.05em] hover:bg-blue-700 transition-colors w-full md:w-auto md:min-w-[245px]">
             Get free Consultation
           </button>
-          <button className="bg-transparent border-[1.5px] border-white text-white px-6 py-4 md:py-6 rounded-[19px] text-base md:text-2xl font-normal tracking-[0.05em] hover:bg-white hover:text-primary transition-colors w-full md:w-auto md:min-w-[245px]">
+          <button 
+            onClick={() => navigate('/calculator')}
+            className="bg-transparent border-[1px] border-white text-white px-5 py-3 md:py-4 rounded-[14px] text-sm md:text-lg font-normal tracking-[0.05em] hover:bg-white hover:text-primary transition-colors w-full md:w-auto md:min-w-[184px]">
             Solar Calculator
           </button>
         </div>

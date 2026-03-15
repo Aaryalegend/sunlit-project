@@ -8,15 +8,15 @@ const StatsSection = () => {
   ];
 
   return (
-    <section className="w-full bg-primary py-6 md:py-9">
+    <section className="w-full bg-primary py-3 md:py-4">
       <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-        <div className="grid grid-cols-2 md:flex md:justify-between gap-6 md:gap-0">
+        <div className="grid grid-cols-2 md:flex md:justify-between gap-4 md:gap-0">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <h3 className="text-[32px] md:text-[48px] font-bold text-white mb-1 md:mb-2">
+            <div key={index} className="flex items-center gap-2 md:gap-3">
+              <h3 className="text-[24px] md:text-[36px] font-bold text-white whitespace-nowrap">
                 {stat.number}
               </h3>
-              <p className="text-sm md:text-2xl font-normal text-white tracking-[0.05em]">
+              <p className="text-xs md:text-base font-normal text-white tracking-[0.05em] leading-tight">
                 {stat.label}
               </p>
             </div>
