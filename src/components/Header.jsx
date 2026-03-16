@@ -8,7 +8,7 @@ const Header = () => {
       {/* Background Video */}
       <div className="absolute inset-0">
         <video 
-          src={require('../assets/sample.mp4')} 
+          src="https://res.cloudinary.com/dsgd4vb02/video/upload/v1773688388/sample_unzlr0.mp4" 
           autoPlay
           loop
           muted
