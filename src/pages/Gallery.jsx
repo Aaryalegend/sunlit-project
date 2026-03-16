@@ -9,7 +9,11 @@ const Gallery = () => {
   const filters = ['All', 'Installations', 'Team', 'Events', 'Before & After'];
 
   useEffect(() => {
-    setGalleryItems(getGalleryItems());
+    const loadGallery = async () => {
+      const items = await getGalleryItems();
+      setGalleryItems(items);
+    };
+    loadGallery();
   }, []);
 
   const filteredItems = activeFilter === 'All' 

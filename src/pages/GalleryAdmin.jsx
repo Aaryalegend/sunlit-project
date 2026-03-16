@@ -8,8 +8,8 @@ import {
   resetGalleryItems,
   gradientOptions,
   categoryOptions,
-  fileToBase64,
 } from '../data/galleryData';
+import { uploadToCloudinary } from '../data/cloudinaryUpload';
 
 const GalleryAdmin = () => {
   const [items, setItems] = useState([]);
@@ -31,7 +31,11 @@ const GalleryAdmin = () => {
   });
 
   useEffect(() => {
-    setItems(getGalleryItems());
+    const loadItems = async () => {
+      const data = await getGalleryItems();
+      setItems(data);
+    };
+    loadItems();
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -54,24 +58,24 @@ const GalleryAdmin = () => {
     }
 
     try {
-      const base64 = await fileToBase64(file);
+      const imageUrl = await uploadToCloudinary(file, 'image');
       if (target === 'new') {
-        setNewItem(prev => ({ ...prev, image: base64 }));
+        setNewItem(prev => ({ ...prev, image: imageUrl }));
       } else if (target === 'edit' && editingItem) {
-        setEditingItem(prev => ({ ...prev, image: base64 }));
+        setEditingItem(prev => ({ ...prev, image: imageUrl }));
       }
     } catch {
-      showToast('Failed to process image', 'error');
+      showToast('Failed to upload image', 'error');
     }
   };
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
     if (!newItem.title.trim() || !newItem.description.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    const updated = addGalleryItem(newItem);
+    const updated = await addGalleryItem(newItem);
     setItems(updated);
     setNewItem({ title: '', category: 'Installations', description: '', gradient: 'from-blue-400 to-blue-700', image: null });
     setShowAddForm(false);
@@ -79,8 +83,8 @@ const GalleryAdmin = () => {
     showToast('Gallery item added successfully!');
   };
 
-  const handleDelete = (id) => {
-    const updated = removeGalleryItem(id);
+  const handleDelete = async (id) => {
+    const updated = await removeGalleryItem(id);
     setItems(updated);
     setDeleteConfirm(null);
     showToast('Gallery item removed successfully!');
@@ -91,20 +95,20 @@ const GalleryAdmin = () => {
     setShowAddForm(false);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingItem.title.trim() || !editingItem.description.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    const updated = updateGalleryItem(editingItem.id, editingItem);
+    const updated = await updateGalleryItem(editingItem.id, editingItem);
     setItems(updated);
     setEditingItem(null);
     showToast('Gallery item updated successfully!');
   };
 
-  const handleReset = () => {
-    const updated = resetGalleryItems();
+  const handleReset = async () => {
+    const updated = await resetGalleryItems();
     setItems(updated);
     setResetConfirm(false);
     showToast('Gallery reset to default items');

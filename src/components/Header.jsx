@@ -5,18 +5,21 @@ const Header = () => {
   const navigate = useNavigate();
   return (
     <section className="relative w-full h-[500px] md:h-[778px]">
-      {/* Background Image */}
+      {/* Background Video */}
       <div className="absolute inset-0">
-        <img 
-          src={require('../assets/header-bg.jpg')} 
-          alt="Solar panels" 
+        <video 
+          src={require('../assets/sample.mp4')} 
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover"
           onError={(e) => {
             e.target.style.background = 'linear-gradient(135deg, #1976D2 0%, #0d47a1 100%)';
           }}
         />
         {/* Overlay */}
-        <div className="absolute inset-0 bg-[rgba(2,32,62,0.57)]"></div>
+        {/* <div className="absolute inset-0 bg-[rgba(2,32,62,0.57)]"></div> */}
       </div>
 
       {/* Content */}

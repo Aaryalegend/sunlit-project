@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'sunlit_projects';
+import { apiGet, apiSend } from './apiClient';
 
 const defaultProjects = [
   {
@@ -110,51 +110,53 @@ export const capacityOptions = [
   '5 MW',
 ];
 
-export function getProjects() {
+export async function getProjects() {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch {
-    // ignore
+    const projects = await apiGet('/api/projects');
+    if (Array.isArray(projects) && projects.length === 0) {
+      return await resetProjects();
+    }
+    return Array.isArray(projects) ? projects : [];
+  } catch (e) {
+    console.error('Failed to load projects:', e);
+    return [...defaultProjects];
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProjects));
-  return [...defaultProjects];
 }
 
-export function saveProjects(projects) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
-  return projects;
-}
-
-export function addProject(project) {
-  const projects = getProjects();
-  const newId = projects.length > 0 ? Math.max(...projects.map((p) => p.id)) + 1 : 1;
-  const newProject = { id: newId, image: null, ...project };
-  projects.push(newProject);
-  saveProjects(projects);
-  return projects;
-}
-
-export function removeProject(id) {
-  let projects = getProjects();
-  projects = projects.filter((p) => p.id !== id);
-  saveProjects(projects);
-  return projects;
-}
-
-export function updateProject(id, updates) {
-  const projects = getProjects();
-  const index = projects.findIndex((p) => p.id === id);
-  if (index !== -1) {
-    projects[index] = { ...projects[index], ...updates };
+export async function addProject(project) {
+  try {
+    return await apiSend('/api/projects', 'POST', { project });
+  } catch (e) {
+    console.error('Failed to add project:', e);
+    return await getProjects();
   }
-  saveProjects(projects);
-  return projects;
 }
 
-export function resetProjects() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProjects));
-  return [...defaultProjects];
+export async function removeProject(id) {
+  try {
+    return await apiSend(`/api/projects?id=${id}`, 'DELETE', {});
+  } catch (e) {
+    console.error('Failed to remove project:', e);
+    return await getProjects();
+  }
+}
+
+export async function updateProject(id, updates) {
+  try {
+    return await apiSend('/api/projects', 'PUT', { id, updates });
+  } catch (e) {
+    console.error('Failed to update project:', e);
+    return await getProjects();
+  }
+}
+
+export async function resetProjects() {
+  try {
+    return await apiSend('/api/projects', 'POST', { action: 'reset', items: defaultProjects });
+  } catch (e) {
+    console.error('Failed to reset projects:', e);
+    return [...defaultProjects];
+  }
 }
 
 export function fileToBase64(file) {

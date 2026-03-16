@@ -9,8 +9,8 @@ import {
   resetBlogs,
   categoryOptions,
   readTimeOptions,
-  fileToBase64,
 } from '../data/blogsData';
+import { uploadToCloudinary } from '../data/cloudinaryUpload';
 
 const emptyBlog = {
   title: '',
@@ -50,7 +50,11 @@ const BlogsAdmin = () => {
   const editFileInputRef = useRef(null);
 
   useEffect(() => {
-    setBlogs(getBlogs());
+    const loadBlogs = async () => {
+      const data = await getBlogs();
+      setBlogs(data);
+    };
+    loadBlogs();
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -70,11 +74,11 @@ const BlogsAdmin = () => {
       return;
     }
     try {
-      const base64 = await fileToBase64(file);
-      if (target === 'new') setNewItem((prev) => ({ ...prev, image: base64 }));
-      else if (target === 'edit' && editingItem) setEditingItem((prev) => ({ ...prev, image: base64 }));
+      const imageUrl = await uploadToCloudinary(file, 'image');
+      if (target === 'new') setNewItem((prev) => ({ ...prev, image: imageUrl }));
+      else if (target === 'edit' && editingItem) setEditingItem((prev) => ({ ...prev, image: imageUrl }));
     } catch {
-      showToast('Failed to process image', 'error');
+      showToast('Failed to upload image', 'error');
     }
   };
 
@@ -83,14 +87,14 @@ const BlogsAdmin = () => {
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
     if (!newItem.title.trim() || !newItem.excerpt.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
     const blog = { ...newItem, date: newItem.date || todayFormatted() };
-    const updated = addBlog(blog);
+    const updated = await addBlog(blog);
     setBlogs(updated);
     setNewItem({ ...emptyBlog });
     setShowAddForm(false);
@@ -103,33 +107,33 @@ const BlogsAdmin = () => {
     setShowAddForm(false);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingItem.title.trim() || !editingItem.excerpt.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    const updated = updateBlog(editingItem.id, editingItem);
+    const updated = await updateBlog(editingItem.id, editingItem);
     setBlogs(updated);
     setEditingItem(null);
     showToast('Blog post updated successfully!');
   };
 
-  const handleDelete = (id) => {
-    const updated = removeBlog(id);
+  const handleDelete = async (id) => {
+    const updated = await removeBlog(id);
     setBlogs(updated);
     setDeleteConfirm(null);
     showToast('Blog post removed successfully!');
   };
 
-  const handleSetFeatured = (id) => {
-    const updated = setFeatured(id);
+  const handleSetFeatured = async (id) => {
+    const updated = await setFeatured(id);
     setBlogs(updated);
     showToast('Featured blog updated!');
   };
 
-  const handleReset = () => {
-    const updated = resetBlogs();
+  const handleReset = async () => {
+    const updated = await resetBlogs();
     setBlogs(updated);
     setResetConfirm(false);
     showToast('Blog posts reset to defaults');

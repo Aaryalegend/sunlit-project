@@ -60,10 +60,10 @@ const Footer = () => {
             <div>
               <h4 className="text-xl md:text-2xl font-bold mb-4 tracking-[0.05em]">Socials</h4>
               <div className="flex gap-4">
-                <a href="#facebook" className="w-9 h-9 hover:opacity-80 transition-opacity bg-white/10 rounded-full flex items-center justify-center">
+                <a href="https://www.facebook.com/share/1CaSYVoenw/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 hover:opacity-80 transition-opacity bg-white/10 rounded-full flex items-center justify-center">
                   <img src={require('../assets/facebook-icon.svg').default || require('../assets/facebook-icon.svg')} alt="Facebook" className="w-5 h-5" onError={(e) => e.target.style.display = 'none'} />
                 </a>
-                <a href="#instagram" className="w-9 h-9 hover:opacity-80 transition-opacity bg-white/10 rounded-full flex items-center justify-center">
+                <a href="https://www.instagram.com/sun_lit_tech?igsh=MTByNXpkNGExOWJwcw==" target="_blank" rel="noopener noreferrer" className="w-9 h-9 hover:opacity-80 transition-opacity bg-white/10 rounded-full flex items-center justify-center">
                   <img src={require('../assets/instagram-icon.svg').default || require('../assets/instagram-icon.svg')} alt="Instagram" className="w-5 h-5" onError={(e) => e.target.style.display = 'none'} />
                 </a>
                 <a href="#linkedin" className="w-9 h-9 hover:opacity-80 transition-opacity bg-white/10 rounded-full flex items-center justify-center">

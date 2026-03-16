@@ -1,3 +1,5 @@
+import { apiGet, apiSend } from './apiClient';
+
 // Default gallery items used as initial seed data
 const defaultGalleryItems = [
   { id: 1, category: 'Installations', title: 'Residential Rooftop - Pune', description: '10 kW rooftop solar installation', gradient: 'from-blue-400 to-blue-700', image: null },
@@ -13,8 +15,6 @@ const defaultGalleryItems = [
   { id: 11, category: 'Installations', title: 'Housing Society - Hadapsar', description: '50 kW shared solar system', gradient: 'from-sky-400 to-sky-700', image: null },
   { id: 12, category: 'Team', title: 'Technical Training', description: 'Annual team training program', gradient: 'from-emerald-400 to-emerald-700', image: null },
 ];
-
-const STORAGE_KEY = 'sunlit_gallery_items';
 
 // Available gradient options for the admin to pick from
 export const gradientOptions = [
@@ -36,58 +36,58 @@ export const gradientOptions = [
 
 export const categoryOptions = ['Installations', 'Team', 'Events', 'Before & After'];
 
-/** Load gallery items from localStorage, falling back to defaults */
-export const getGalleryItems = () => {
+/** Load gallery items from API, falling back to defaults */
+export const getGalleryItems = async () => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      return JSON.parse(stored);
+    const items = await apiGet('/api/gallery');
+    if (Array.isArray(items) && items.length === 0) {
+      return await resetGalleryItems();
     }
+    return Array.isArray(items) ? items : [];
   } catch (e) {
     console.error('Failed to load gallery items:', e);
-  }
-  return defaultGalleryItems;
-};
-
-/** Save gallery items to localStorage */
-export const saveGalleryItems = (items) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  } catch (e) {
-    console.error('Failed to save gallery items:', e);
+    return [...defaultGalleryItems];
   }
 };
 
 /** Add a new gallery item */
-export const addGalleryItem = (item) => {
-  const items = getGalleryItems();
-  const newId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
-  const newItem = { ...item, id: newId };
-  const updated = [...items, newItem];
-  saveGalleryItems(updated);
-  return updated;
+export const addGalleryItem = async (item) => {
+  try {
+    return await apiSend('/api/gallery', 'POST', { item });
+  } catch (e) {
+    console.error('Failed to add gallery item:', e);
+    return await getGalleryItems();
+  }
 };
 
 /** Remove a gallery item by id */
-export const removeGalleryItem = (id) => {
-  const items = getGalleryItems();
-  const updated = items.filter(item => item.id !== id);
-  saveGalleryItems(updated);
-  return updated;
+export const removeGalleryItem = async (id) => {
+  try {
+    return await apiSend(`/api/gallery?id=${id}`, 'DELETE', {});
+  } catch (e) {
+    console.error('Failed to remove gallery item:', e);
+    return await getGalleryItems();
+  }
 };
 
 /** Update a gallery item */
-export const updateGalleryItem = (id, updatedFields) => {
-  const items = getGalleryItems();
-  const updated = items.map(item => item.id === id ? { ...item, ...updatedFields } : item);
-  saveGalleryItems(updated);
-  return updated;
+export const updateGalleryItem = async (id, updatedFields) => {
+  try {
+    return await apiSend('/api/gallery', 'PUT', { id, updates: updatedFields });
+  } catch (e) {
+    console.error('Failed to update gallery item:', e);
+    return await getGalleryItems();
+  }
 };
 
 /** Reset gallery to defaults */
-export const resetGalleryItems = () => {
-  saveGalleryItems(defaultGalleryItems);
-  return defaultGalleryItems;
+export const resetGalleryItems = async () => {
+  try {
+    return await apiSend('/api/gallery', 'POST', { action: 'reset', items: defaultGalleryItems });
+  } catch (e) {
+    console.error('Failed to reset gallery items:', e);
+    return [...defaultGalleryItems];
+  }
 };
 
 /** Convert an image File to a base64 data URL */

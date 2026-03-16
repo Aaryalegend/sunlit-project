@@ -8,7 +8,11 @@ const Projects = () => {
   const filters = ['All', 'Residential', 'Commercial', 'Industrial', 'Government'];
 
   useEffect(() => {
-    setProjects(getProjects());
+    const loadProjects = async () => {
+      const data = await getProjects();
+      setProjects(data);
+    };
+    loadProjects();
   }, []);
 
   const filteredProjects = activeFilter === 'All' 
@@ -19,8 +23,19 @@ const Projects = () => {
     <div className="min-h-screen">
       {/* Hero Banner */}
       <section className="relative w-full h-[300px] md:h-[400px]">
-        {/* <div className="absolute inset-0 bg-gradient-to-r from-[#02203E] to-[#1976D2]"></div> */}
-        <div className="absolute inset-0 bg-[rgba(2,32,62,0.57)]"></div>
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src={require('../assets/project-hero-bg.jpg')} 
+            alt="Solar panels" 
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, #1976D2 0%, #0d47a1 100%)';
+            }}
+          />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-[rgba(2,32,62,0.57)]"></div>
+        </div>
         <div className="relative max-w-[1280px] mx-auto px-4 md:px-[90px] h-full flex flex-col justify-center">
           <h1 className="text-[32px] md:text-[64px] font-bold text-lightBlue leading-tight tracking-[0.05em]">
             Our Projects
@@ -32,19 +47,19 @@ const Projects = () => {
       </section>
 
       {/* Stats Bar */}
-      <section className="w-full bg-primary py-6 md:py-9">
+      <section className="w-full bg-primary py-3 md:py-4">
         <div className="max-w-[1280px] mx-auto px-4 md:px-12">
-          <div className="grid grid-cols-2 md:flex md:justify-between gap-6 md:gap-0">
+          <div className="flex flex-wrap md:flex-row justify-center md:justify-between gap-4 md:gap-0">
             {[
               { number: '200+', label: 'Projects Completed' },
               { number: '5MW+', label: 'Total Capacity' },
               { number: '15+', label: 'Cities Covered' },
             ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <h3 className="text-[32px] md:text-[48px] font-bold text-white mb-1 md:mb-2">
+              <div key={index} className="flex items-center justify-center gap-2 md:gap-3">
+                <h3 className="text-[20px] md:text-[32px] font-bold text-white">
                   {stat.number}
                 </h3>
-                <p className="text-sm md:text-2xl font-normal text-white tracking-[0.05em]">
+                <p className="text-sm md:text-lg font-normal text-white tracking-[0.05em]">
                   {stat.label}
                 </p>
               </div>

@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'sunlit_blog_posts';
+import { apiGet, apiSend } from './apiClient';
 
 const defaultFeaturedBlog = {
   id: 1,
@@ -137,58 +137,62 @@ export const readTimeOptions = [
   '15 min read',
 ];
 
-export function getBlogs() {
+export async function getBlogs() {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch {
-    // ignore
+    const blogs = await apiGet('/api/blogs');
+    if (Array.isArray(blogs) && blogs.length === 0) {
+      return await resetBlogs();
+    }
+    return Array.isArray(blogs) ? blogs : [];
+  } catch (e) {
+    console.error('Failed to load blogs:', e);
+    return [...defaultBlogs];
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultBlogs));
-  return [...defaultBlogs];
 }
 
-export function saveBlogs(blogs) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(blogs));
-  return blogs;
-}
-
-export function addBlog(blog) {
-  const blogs = getBlogs();
-  const newId = blogs.length > 0 ? Math.max(...blogs.map((b) => b.id)) + 1 : 1;
-  const newBlog = { id: newId, featured: false, image: null, ...blog };
-  blogs.unshift(newBlog); // newest first
-  saveBlogs(blogs);
-  return blogs;
-}
-
-export function removeBlog(id) {
-  let blogs = getBlogs();
-  blogs = blogs.filter((b) => b.id !== id);
-  saveBlogs(blogs);
-  return blogs;
-}
-
-export function updateBlog(id, updates) {
-  const blogs = getBlogs();
-  const index = blogs.findIndex((b) => b.id === id);
-  if (index !== -1) {
-    blogs[index] = { ...blogs[index], ...updates };
+export async function addBlog(blog) {
+  try {
+    return await apiSend('/api/blogs', 'POST', { blog });
+  } catch (e) {
+    console.error('Failed to add blog:', e);
+    return await getBlogs();
   }
-  saveBlogs(blogs);
-  return blogs;
 }
 
-export function setFeatured(id) {
-  const blogs = getBlogs();
-  blogs.forEach((b) => (b.featured = b.id === id));
-  saveBlogs(blogs);
-  return blogs;
+export async function removeBlog(id) {
+  try {
+    return await apiSend(`/api/blogs?id=${id}`, 'DELETE', {});
+  } catch (e) {
+    console.error('Failed to remove blog:', e);
+    return await getBlogs();
+  }
 }
 
-export function resetBlogs() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultBlogs));
-  return [...defaultBlogs];
+export async function updateBlog(id, updates) {
+  try {
+    return await apiSend('/api/blogs', 'PUT', { id, updates });
+  } catch (e) {
+    console.error('Failed to update blog:', e);
+    return await getBlogs();
+  }
+}
+
+export async function setFeatured(id) {
+  try {
+    return await apiSend('/api/blogs', 'PATCH', { id });
+  } catch (e) {
+    console.error('Failed to update featured blog:', e);
+    return await getBlogs();
+  }
+}
+
+export async function resetBlogs() {
+  try {
+    return await apiSend('/api/blogs', 'POST', { action: 'reset', items: defaultBlogs });
+  } catch (e) {
+    console.error('Failed to reset blogs:', e);
+    return [...defaultBlogs];
+  }
 }
 
 export function fileToBase64(file) {

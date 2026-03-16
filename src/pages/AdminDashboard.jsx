@@ -23,11 +23,17 @@ const AdminDashboard = () => {
     setSettings(getSettings());
   }, []);
 
-  const loadStats = () => {
+  const loadStats = async () => {
+    const [projects, blogs, gallery] = await Promise.all([
+      getProjects(),
+      getBlogs(),
+      getGalleryItems(),
+    ]);
+
     setStats({
-      projects: getProjects().length,
-      blogs: getBlogs().length,
-      gallery: getGalleryItems().length,
+      projects: projects.length,
+      blogs: blogs.length,
+      gallery: gallery.length,
       positions: getPositions().length,
       applications: getApplications().length,
       messages: getMessages().filter(m => m.status === 'unread').length,

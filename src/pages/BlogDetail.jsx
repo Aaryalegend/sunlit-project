@@ -9,19 +9,22 @@ const BlogDetail = () => {
   const [relatedBlogs, setRelatedBlogs] = useState([]);
 
   useEffect(() => {
-    const allBlogs = getBlogs();
-    const found = allBlogs.find((b) => b.id === parseInt(id));
-    if (!found) {
-      navigate('/blogs');
-      return;
-    }
-    setBlog(found);
-    setRelatedBlogs(
-      allBlogs
-        .filter((b) => b.id !== found.id && b.category === found.category)
-        .slice(0, 3)
-    );
-    window.scrollTo(0, 0);
+    const loadBlog = async () => {
+      const allBlogs = await getBlogs();
+      const found = allBlogs.find((b) => b.id === parseInt(id, 10));
+      if (!found) {
+        navigate('/blogs');
+        return;
+      }
+      setBlog(found);
+      setRelatedBlogs(
+        allBlogs
+          .filter((b) => b.id !== found.id && b.category === found.category)
+          .slice(0, 3)
+      );
+      window.scrollTo(0, 0);
+    };
+    loadBlog();
   }, [id, navigate]);
 
   const getCategoryColor = (category) => {

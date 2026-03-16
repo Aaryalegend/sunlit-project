@@ -7,8 +7,8 @@ import {
   updateProject,
   resetProjects,
   categoryOptions,
-  fileToBase64,
 } from '../data/projectsData';
+import { uploadToCloudinary } from '../data/cloudinaryUpload';
 
 const emptyProject = {
   title: '',
@@ -32,7 +32,11 @@ const ProjectsAdmin = () => {
   const editFileInputRef = useRef(null);
 
   useEffect(() => {
-    setProjects(getProjects());
+    const loadProjects = async () => {
+      const data = await getProjects();
+      setProjects(data);
+    };
+    loadProjects();
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -52,21 +56,21 @@ const ProjectsAdmin = () => {
       return;
     }
     try {
-      const base64 = await fileToBase64(file);
-      if (target === 'new') setNewItem((prev) => ({ ...prev, image: base64 }));
-      else if (target === 'edit' && editingItem) setEditingItem((prev) => ({ ...prev, image: base64 }));
+      const imageUrl = await uploadToCloudinary(file, 'image');
+      if (target === 'new') setNewItem((prev) => ({ ...prev, image: imageUrl }));
+      else if (target === 'edit' && editingItem) setEditingItem((prev) => ({ ...prev, image: imageUrl }));
     } catch {
-      showToast('Failed to process image', 'error');
+      showToast('Failed to upload image', 'error');
     }
   };
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
     if (!newItem.title.trim() || !newItem.location.trim() || !newItem.description.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    const updated = addProject(newItem);
+    const updated = await addProject(newItem);
     setProjects(updated);
     setNewItem({ ...emptyProject });
     setShowAddForm(false);
@@ -79,27 +83,27 @@ const ProjectsAdmin = () => {
     setShowAddForm(false);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingItem.title.trim() || !editingItem.location.trim() || !editingItem.description.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    const updated = updateProject(editingItem.id, editingItem);
+    const updated = await updateProject(editingItem.id, editingItem);
     setProjects(updated);
     setEditingItem(null);
     showToast('Project updated successfully!');
   };
 
-  const handleDelete = (id) => {
-    const updated = removeProject(id);
+  const handleDelete = async (id) => {
+    const updated = await removeProject(id);
     setProjects(updated);
     setDeleteConfirm(null);
     showToast('Project removed successfully!');
   };
 
-  const handleReset = () => {
-    const updated = resetProjects();
+  const handleReset = async () => {
+    const updated = await resetProjects();
     setProjects(updated);
     setResetConfirm(false);
     showToast('Projects reset to defaults');
