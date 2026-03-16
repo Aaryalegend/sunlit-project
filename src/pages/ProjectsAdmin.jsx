@@ -7,7 +7,6 @@ import {
   updateProject,
   resetProjects,
   categoryOptions,
-  capacityOptions,
   fileToBase64,
 } from '../data/projectsData';
 
@@ -18,7 +17,6 @@ const emptyProject = {
   location: '',
   description: '',
   image: null,
-  stats: { savings: '', co2: '' },
 };
 
 const ProjectsAdmin = () => {
@@ -29,7 +27,7 @@ const ProjectsAdmin = () => {
   const [resetConfirm, setResetConfirm] = useState(false);
   const [toast, setToast] = useState(null);
   const [filterCategory, setFilterCategory] = useState('All');
-  const [newItem, setNewItem] = useState({ ...emptyProject, stats: { ...emptyProject.stats } });
+  const [newItem, setNewItem] = useState({ ...emptyProject });
   const fileInputRef = useRef(null);
   const editFileInputRef = useRef(null);
 
@@ -68,20 +66,16 @@ const ProjectsAdmin = () => {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    if (!newItem.stats.savings.trim() || !newItem.stats.co2.trim()) {
-      showToast('Please fill in savings and CO₂ stats', 'error');
-      return;
-    }
     const updated = addProject(newItem);
     setProjects(updated);
-    setNewItem({ ...emptyProject, stats: { ...emptyProject.stats } });
+    setNewItem({ ...emptyProject });
     setShowAddForm(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
     showToast('Project added successfully!');
   };
 
   const handleEdit = (item) => {
-    setEditingItem({ ...item, stats: { ...item.stats } });
+    setEditingItem({ ...item });
     setShowAddForm(false);
   };
 
@@ -89,10 +83,6 @@ const ProjectsAdmin = () => {
     e.preventDefault();
     if (!editingItem.title.trim() || !editingItem.location.trim() || !editingItem.description.trim()) {
       showToast('Please fill in all required fields', 'error');
-      return;
-    }
-    if (!editingItem.stats.savings.trim() || !editingItem.stats.co2.trim()) {
-      showToast('Please fill in savings and CO₂ stats', 'error');
       return;
     }
     const updated = updateProject(editingItem.id, editingItem);
@@ -150,15 +140,14 @@ const ProjectsAdmin = () => {
         </div>
         <div>
           <label className="block text-sm font-bold text-dark mb-2">Capacity *</label>
-          <select
+          <input
+            type="text"
             value={data.capacity}
             onChange={(e) => setData({ ...data, capacity: e.target.value })}
-            className="w-full px-4 py-3 rounded-[12px] border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 bg-white"
-          >
-            {capacityOptions.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+            required
+            placeholder="e.g., 10 kW"
+            className="w-full px-4 py-3 rounded-[12px] border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20"
+          />
         </div>
         <div>
           <label className="block text-sm font-bold text-dark mb-2">Location *</label>
@@ -184,32 +173,6 @@ const ProjectsAdmin = () => {
           placeholder="Describe the project..."
           className="w-full px-4 py-3 rounded-[12px] border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 resize-none"
         />
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <label className="block text-sm font-bold text-dark mb-2">Monthly Savings *</label>
-          <input
-            type="text"
-            value={data.stats.savings}
-            onChange={(e) => setData({ ...data, stats: { ...data.stats, savings: e.target.value } })}
-            required
-            placeholder="e.g., ₹15,000/month"
-            className="w-full px-4 py-3 rounded-[12px] border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-dark mb-2">CO₂ Reduced *</label>
-          <input
-            type="text"
-            value={data.stats.co2}
-            onChange={(e) => setData({ ...data, stats: { ...data.stats, co2: e.target.value } })}
-            required
-            placeholder="e.g., 12 tons/year"
-            className="w-full px-4 py-3 rounded-[12px] border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20"
-          />
-        </div>
       </div>
 
       {/* Image */}
@@ -427,11 +390,9 @@ const ProjectsAdmin = () => {
                         {project.location}
                       </p>
                       <p className="text-sm text-gray-500 mt-1 line-clamp-2">{project.description}</p>
-                      <div className="mt-2 flex items-center gap-4 text-xs">
-                        <span className="text-primary font-bold">Savings: {project.stats.savings}</span>
-                        <span className="text-green-600 font-bold">CO₂: {project.stats.co2}</span>
+                      {/* <div className="mt-2 flex items-center gap-4 text-xs">
                         {project.image && <span className="text-gray-400">Has image</span>}
-                      </div>
+                      </div> */}
                     </div>
 
                     {/* Actions */}

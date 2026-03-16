@@ -19,7 +19,7 @@ const Projects = () => {
     <div className="min-h-screen">
       {/* Hero Banner */}
       <section className="relative w-full h-[300px] md:h-[400px]">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#02203E] to-[#1976D2]"></div>
+        {/* <div className="absolute inset-0 bg-gradient-to-r from-[#02203E] to-[#1976D2]"></div> */}
         <div className="absolute inset-0 bg-[rgba(2,32,62,0.57)]"></div>
         <div className="relative max-w-[1280px] mx-auto px-4 md:px-[90px] h-full flex flex-col justify-center">
           <h1 className="text-[32px] md:text-[64px] font-bold text-lightBlue leading-tight tracking-[0.05em]">
@@ -114,18 +114,7 @@ const Projects = () => {
                   <p className="text-sm md:text-[15px] font-normal text-dark leading-relaxed tracking-[0.05em] mb-4">
                     {project.description}
                   </p>
-                  
-                  {/* Stats */}
-                  <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                    <div>
-                      <p className="text-xs text-gray-500 font-normal">Savings</p>
-                      <p className="text-sm font-bold text-primary">{project.stats.savings}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 font-normal">CO₂ Reduced</p>
-                      <p className="text-sm font-bold text-green-600">{project.stats.co2}</p>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             ))}
