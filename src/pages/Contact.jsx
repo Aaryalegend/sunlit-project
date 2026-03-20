@@ -241,14 +241,15 @@ const Contact = () => {
             </div>
 
             {/* Map */}
+            {/* Map */}
             <div className="rounded-[20px] overflow-hidden shadow-card h-[400px] md:h-auto">
               <iframe
-                title="Sun Lit Tech Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.5477862789766!2d73.9256559!3d18.5089579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c1e2c0000001%3A0x7ef6ef5a6b5e0a4b!2sMagarpatta%20City%2C%20Hadapsar%2C%20Pune%2C%20Maharashtra%20411028!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                title="Sunlit Tech Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4724.521043060316!2d73.9279766!3d18.5036679!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c1f0fabff25b%3A0xbf21f25dd543962e!2sSunlit%20Tech!5e1!3m2!1sen!2sin!4v1774005036146!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
-                style={{ border: 0, minHeight: '400px' }}
-                allowFullScreen=""
+                style={{ border: 0, minHeight: "400px" }}
+                allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
