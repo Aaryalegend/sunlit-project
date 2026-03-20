@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { getPositions } from '../data/careersData';
 import { addApplication } from '../data/applicationsData';
+import { getTeamMembers } from '../data/teamData';
 
 const Careers = () => {
   const [expandedJob, setExpandedJob] = useState(null);
   const [openPositions, setOpenPositions] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [showAllTeam, setShowAllTeam] = useState(false);
   const [applyingFor, setApplyingFor] = useState(null); // job object or 'general'
   const [appForm, setAppForm] = useState({ name: '', email: '', phone: '', experience: '', coverLetter: '' });
   const [toast, setToast] = useState(null);
@@ -12,6 +15,7 @@ const Careers = () => {
 
   useEffect(() => {
     setOpenPositions(getPositions());
+    setTeamMembers(getTeamMembers());
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -22,6 +26,13 @@ const Careers = () => {
   const openApplyForm = (job) => {
     setApplyingFor(job);
     setAppForm({ name: '', email: '', phone: '', experience: '', coverLetter: '' });
+  };
+
+  const getInitials = (name) => {
+    if (!name) return 'SL';
+    const parts = name.trim().split(/\s+/).slice(0, 2);
+    const initials = parts.map((part) => part.charAt(0).toUpperCase()).join('');
+    return initials || 'SL';
   };
 
   const handleApply = (e) => {
@@ -47,6 +58,9 @@ const Careers = () => {
     { icon: '🎓', title: 'Training Programs', description: 'Regular skill development and certification support' },
     { icon: '🌍', title: 'Meaningful Work', description: 'Contribute to a sustainable and greener future' },
   ];
+
+  const visibleTeam = showAllTeam ? teamMembers : teamMembers.slice(0, 6);
+  const hasMoreTeam = teamMembers.length > 6;
 
   return (
     <div className="min-h-screen">
@@ -129,6 +143,54 @@ const Careers = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Our Team */}
+      <section className="w-full py-12 md:py-20 px-4 md:px-20 bg-white">
+        <div className="max-w-[1280px] mx-auto">
+          <div className="text-center mb-10 md:mb-14">
+            <h2 className="text-[32px] md:text-[48px] font-bold text-primary mb-2 md:mb-4">
+              Our Team
+            </h2>
+            <h3 className="text-[20px] md:text-[32px] font-normal text-dark">
+              Meet the people powering Sun Lit Tech
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {visibleTeam.map((member) => (
+              <div
+                key={member.id}
+                className="bg-lightBlue rounded-[20px] p-6 md:p-7 shadow-card text-center flex flex-col items-center"
+              >
+                <div className="w-24 h-24 rounded-full bg-white shadow-md overflow-hidden flex items-center justify-center text-primary text-xl font-bold">
+                  {member.image ? (
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    getInitials(member.name)
+                  )}
+                </div>
+                <h4 className="text-lg md:text-xl font-bold text-dark mt-4">{member.name}</h4>
+                <p className="text-sm md:text-base text-dark/70 mt-1">{member.role}</p>
+              </div>
+            ))}
+          </div>
+
+          {hasMoreTeam && (
+            <div className="mt-10 flex justify-center">
+              <button
+                onClick={() => setShowAllTeam((prev) => !prev)}
+                className="bg-primary text-white px-8 py-3 rounded-[19px] text-base font-bold hover:bg-blue-700 transition-colors"
+              >
+                {showAllTeam ? 'View Less' : 'View More'}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

@@ -48,6 +48,7 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/blogs', label: 'Blogs', icon: '✎' },
     { path: '/admin/gallery', label: 'Gallery', icon: '▦' },
     { path: '/admin/careers', label: 'Careers', icon: '⚑' },
+    { path: '/admin/team', label: 'Team', icon: '☺' },
     { path: '/admin/applications', label: 'Applications', icon: '✉' },
     { path: '/admin/messages', label: 'Messages', icon: '💬' },
   ];

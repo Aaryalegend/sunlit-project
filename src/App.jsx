@@ -24,6 +24,7 @@ import ProjectsAdmin from './pages/ProjectsAdmin';
 import ApplicationsAdmin from './pages/ApplicationsAdmin';
 import MessagesAdmin from './pages/MessagesAdmin';
 import BlogDetail from './pages/BlogDetail';
+import TeamAdmin from './pages/TeamAdmin';
 
 function HomePage() {
   return (
@@ -66,6 +67,7 @@ function AppContent() {
           <Route path="/admin/projects" element={<AdminLayout><ProjectsAdmin /></AdminLayout>} />
           <Route path="/admin/applications" element={<AdminLayout><ApplicationsAdmin /></AdminLayout>} />
           <Route path="/admin/messages" element={<AdminLayout><MessagesAdmin /></AdminLayout>} />
+          <Route path="/admin/team" element={<AdminLayout><TeamAdmin /></AdminLayout>} />
         </Routes>
         {!isAdmin && <Footer />}
       </div>

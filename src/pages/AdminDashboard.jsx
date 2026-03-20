@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getGalleryItems } from '../data/galleryData';
 import { getPositions } from '../data/careersData';
+import { getTeamMembers } from '../data/teamData';
 import { getBlogs } from '../data/blogsData';
 import { getProjects } from '../data/projectsData';
 import { getSettings, updateSettings, resetSettings } from '../data/siteSettings';
@@ -10,7 +11,7 @@ import { getApplications } from '../data/applicationsData';
 import { getMessages } from '../data/messagesData';
 
 const AdminDashboard = () => {
-  const [stats, setStats] = useState({ projects: 0, blogs: 0, gallery: 0, positions: 0, applications: 0, messages: 0 });
+  const [stats, setStats] = useState({ projects: 0, blogs: 0, gallery: 0, positions: 0, team: 0, applications: 0, messages: 0 });
   const [settings, setSettings] = useState(getSettings());
   const [editingSettings, setEditingSettings] = useState(false);
   const [settingsForm, setSettingsForm] = useState({});
@@ -35,6 +36,7 @@ const AdminDashboard = () => {
       blogs: blogs.length,
       gallery: gallery.length,
       positions: getPositions().length,
+      team: getTeamMembers().length,
       applications: getApplications().length,
       messages: getMessages().filter(m => m.status === 'unread').length,
     });
@@ -124,6 +126,14 @@ const AdminDashboard = () => {
       description: 'Post & manage job openings',
     },
     {
+      title: 'Team',
+      path: '/admin/team',
+      icon: '☺',
+      count: stats.team,
+      color: 'from-teal-400 to-emerald-500',
+      description: 'Manage team profiles on Careers page',
+    },
+    {
       title: 'Applications',
       path: '/admin/applications',
       icon: '✉',
@@ -146,6 +156,7 @@ const AdminDashboard = () => {
     { label: 'Blog Posts', value: stats.blogs, icon: '✎', bg: 'bg-blue-50 text-blue-700' },
     { label: 'Gallery Items', value: stats.gallery, icon: '▦', bg: 'bg-emerald-50 text-emerald-700' },
     { label: 'Open Positions', value: stats.positions, icon: '⚑', bg: 'bg-purple-50 text-purple-700' },
+    { label: 'Team Members', value: stats.team, icon: '☺', bg: 'bg-teal-50 text-teal-700' },
     { label: 'Applications', value: stats.applications, icon: '✉', bg: 'bg-rose-50 text-rose-700' },
     { label: 'Unread Messages', value: stats.messages, icon: '💬', bg: 'bg-cyan-50 text-cyan-700' },
   ];
