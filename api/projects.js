@@ -63,7 +63,9 @@ module.exports = async (req, res) => {
         res.status(400).json({ error: 'Missing id' });
         return;
       }
-      await collection.updateOne({ id }, { $set: body.updates || {} });
+      const updates = body.updates || {};
+      delete updates._id; // Remove immutable _id before saving
+      await collection.updateOne({ id }, { $set: updates });
       res.status(200).json(await listProjects(collection));
       return;
     }

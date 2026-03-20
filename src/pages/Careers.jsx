@@ -50,14 +50,14 @@ const Careers = () => {
     }, 800);
   };
 
-  const benefits = [
-    { icon: '🌱', title: 'Growth Opportunities', description: 'Continuous learning and career development programs' },
-    { icon: '💰', title: 'Competitive Salary', description: 'Industry-leading compensation packages' },
-    { icon: '🏥', title: 'Health Insurance', description: 'Comprehensive health coverage for you and your family' },
-    { icon: '🏖️', title: 'Work-Life Balance', description: 'Flexible hours and generous paid time off' },
-    { icon: '🎓', title: 'Training Programs', description: 'Regular skill development and certification support' },
-    { icon: '🌍', title: 'Meaningful Work', description: 'Contribute to a sustainable and greener future' },
-  ];
+  // const benefits = [
+  //   { icon: '🌱', title: 'Growth Opportunities', description: 'Continuous learning and career development programs' },
+  //   { icon: '💰', title: 'Competitive Salary', description: 'Industry-leading compensation packages' },
+  //   { icon: '🏥', title: 'Health Insurance', description: 'Comprehensive health coverage for you and your family' },
+  //   { icon: '🏖️', title: 'Work-Life Balance', description: 'Flexible hours and generous paid time off' },
+  //   { icon: '🎓', title: 'Training Programs', description: 'Regular skill development and certification support' },
+  //   { icon: '🌍', title: 'Meaningful Work', description: 'Contribute to a sustainable and greener future' },
+  // ];
 
   const visibleTeam = showAllTeam ? teamMembers : teamMembers.slice(0, 6);
   const hasMoreTeam = teamMembers.length > 6;
