@@ -15,8 +15,24 @@ const Careers = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    setOpenPositions(getPositions());
-    setTeamMembers(getTeamMembers());
+    let isMounted = true;
+    const loadData = async () => {
+      try {
+        const [positions, members] = await Promise.all([getPositions(), getTeamMembers()]);
+        if (!isMounted) return;
+        setOpenPositions(positions);
+        setTeamMembers(members);
+      } catch {
+        if (!isMounted) return;
+        setOpenPositions([]);
+        setTeamMembers([]);
+        showToast('Failed to load careers data', 'error');
+      }
+    };
+    loadData();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -66,13 +82,13 @@ const Careers = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Banner */}
-      <section className="relative w-full h-[300px] md:h-[450px]">
+      <section className="relative w-full h-[200px] md:h-[350px]">
         <div className="absolute inset-0 bg-gradient-to-r from-[#02203E] to-[#1976D2]"></div>
-        <div className="relative max-w-[1280px] mx-auto px-4 md:px-[90px] h-full flex flex-col justify-center">
+        <div className="relative max-w-[1400px] mx-auto px-4 md:px-[60px] h-full flex flex-col justify-center">
           <h1 className="text-[32px] md:text-[64px] font-bold text-lightBlue leading-tight tracking-[0.05em]">
             Join Our Team
           </h1>
-          <p className="text-base md:text-2xl font-normal text-white mt-4 max-w-[700px] tracking-[0.05em]">
+          <p className="text-base md:text-xl font-normal text-white mt-4 max-w-[700px] tracking-[0.05em]">
             Build your career while building a sustainable future. Be part of India's solar energy revolution.
           </p>
           <a 
@@ -159,7 +175,7 @@ const Careers = () => {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
             {visibleTeam.map((member) => (
               <div
                 key={member.id}

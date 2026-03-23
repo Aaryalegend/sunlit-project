@@ -32,7 +32,22 @@ const CareersAdmin = () => {
   const [newItem, setNewItem] = useState({ ...emptyPosition });
 
   useEffect(() => {
-    setPositions(getPositions());
+    let isMounted = true;
+    const loadPositions = async () => {
+      try {
+        const items = await getPositions();
+        if (!isMounted) return;
+        setPositions(items);
+      } catch {
+        if (!isMounted) return;
+        setPositions([]);
+        showToast('Failed to load positions', 'error');
+      }
+    };
+    loadPositions();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -72,7 +87,7 @@ const CareersAdmin = () => {
   };
 
   // --- CRUD ---
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
     if (!newItem.title.trim() || !newItem.location.trim() || !newItem.description.trim()) {
       showToast('Please fill in all required fields', 'error');
@@ -83,11 +98,15 @@ const CareersAdmin = () => {
       showToast('Add at least one requirement', 'error');
       return;
     }
-    const updated = addPosition({ ...newItem, requirements: cleanReqs });
-    setPositions(updated);
-    setNewItem({ ...emptyPosition, requirements: [''] });
-    setShowAddForm(false);
-    showToast('Position added successfully!');
+    try {
+      const updated = await addPosition({ ...newItem, requirements: cleanReqs });
+      setPositions(updated);
+      setNewItem({ ...emptyPosition, requirements: [''] });
+      setShowAddForm(false);
+      showToast('Position added successfully!');
+    } catch {
+      showToast('Failed to add position', 'error');
+    }
   };
 
   const handleEdit = (item) => {
@@ -95,7 +114,7 @@ const CareersAdmin = () => {
     setShowAddForm(false);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingItem.title.trim() || !editingItem.location.trim() || !editingItem.description.trim()) {
       showToast('Please fill in all required fields', 'error');
@@ -106,24 +125,36 @@ const CareersAdmin = () => {
       showToast('Add at least one requirement', 'error');
       return;
     }
-    const updated = updatePosition(editingItem.id, { ...editingItem, requirements: cleanReqs });
-    setPositions(updated);
-    setEditingItem(null);
-    showToast('Position updated successfully!');
+    try {
+      const updated = await updatePosition(editingItem.id, { ...editingItem, requirements: cleanReqs });
+      setPositions(updated);
+      setEditingItem(null);
+      showToast('Position updated successfully!');
+    } catch {
+      showToast('Failed to update position', 'error');
+    }
   };
 
-  const handleDelete = (id) => {
-    const updated = removePosition(id);
-    setPositions(updated);
-    setDeleteConfirm(null);
-    showToast('Position removed successfully!');
+  const handleDelete = async (id) => {
+    try {
+      const updated = await removePosition(id);
+      setPositions(updated);
+      setDeleteConfirm(null);
+      showToast('Position removed successfully!');
+    } catch {
+      showToast('Failed to remove position', 'error');
+    }
   };
 
-  const handleReset = () => {
-    const updated = resetPositions();
-    setPositions(updated);
-    setResetConfirm(false);
-    showToast('Positions reset to defaults');
+  const handleReset = async () => {
+    try {
+      const updated = await resetPositions();
+      setPositions(updated);
+      setResetConfirm(false);
+      showToast('Positions reset to defaults');
+    } catch {
+      showToast('Failed to reset positions', 'error');
+    }
   };
 
   const departments = [...new Set(positions.map((p) => p.department))];

@@ -23,13 +23,13 @@ const Gallery = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Banner */}
-      <section className="relative w-full h-[300px] md:h-[400px]">
+      <section className="relative w-full h-[150px] md:h-[200px]">
         <div className="absolute inset-0 bg-gradient-to-r from-[#02203E] to-[#1976D2]"></div>
         <div className="relative max-w-[1280px] mx-auto px-4 md:px-[90px] h-full flex flex-col justify-center">
           <h1 className="text-[32px] md:text-[64px] font-bold text-lightBlue leading-tight tracking-[0.05em]">
             Project Gallery
           </h1>
-          <p className="text-base md:text-2xl font-normal text-white mt-4 max-w-[634px] tracking-[0.05em]">
+          <p className="text-base md:text-xl font-normal text-white mt-4 max-w-[634px] tracking-[0.05em]">
             A visual journey through our solar installations and team moments
           </p>
         </div>

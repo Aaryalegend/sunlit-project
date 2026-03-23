@@ -34,7 +34,22 @@ const TeamAdmin = () => {
   const editFileInputRef = useRef(null);
 
   useEffect(() => {
-    setMembers(getTeamMembers());
+    let isMounted = true;
+    const loadMembers = async () => {
+      try {
+        const items = await getTeamMembers();
+        if (!isMounted) return;
+        setMembers(items);
+      } catch {
+        if (!isMounted) return;
+        setMembers([]);
+        showToast('Failed to load team members', 'error');
+      }
+    };
+    loadMembers();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -64,18 +79,22 @@ const TeamAdmin = () => {
     }
   };
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.preventDefault();
     if (!newItem.name.trim() || !newItem.role.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    const updated = addTeamMember(newItem);
-    setMembers(updated);
-    setNewItem({ ...emptyMember });
-    setShowAddForm(false);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    showToast('Team member added successfully!');
+    try {
+      const updated = await addTeamMember(newItem);
+      setMembers(updated);
+      setNewItem({ ...emptyMember });
+      setShowAddForm(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      showToast('Team member added successfully!');
+    } catch {
+      showToast('Failed to add team member', 'error');
+    }
   };
 
   const handleEdit = (item) => {
@@ -83,30 +102,42 @@ const TeamAdmin = () => {
     setShowAddForm(false);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingItem.name.trim() || !editingItem.role.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
-    const updated = updateTeamMember(editingItem.id, editingItem);
-    setMembers(updated);
-    setEditingItem(null);
-    showToast('Team member updated successfully!');
+    try {
+      const updated = await updateTeamMember(editingItem.id, editingItem);
+      setMembers(updated);
+      setEditingItem(null);
+      showToast('Team member updated successfully!');
+    } catch {
+      showToast('Failed to update team member', 'error');
+    }
   };
 
-  const handleDelete = (id) => {
-    const updated = removeTeamMember(id);
-    setMembers(updated);
-    setDeleteConfirm(null);
-    showToast('Team member removed successfully!');
+  const handleDelete = async (id) => {
+    try {
+      const updated = await removeTeamMember(id);
+      setMembers(updated);
+      setDeleteConfirm(null);
+      showToast('Team member removed successfully!');
+    } catch {
+      showToast('Failed to remove team member', 'error');
+    }
   };
 
-  const handleReset = () => {
-    const updated = resetTeamMembers();
-    setMembers(updated);
-    setResetConfirm(false);
-    showToast('Team reset to defaults');
+  const handleReset = async () => {
+    try {
+      const updated = await resetTeamMembers();
+      setMembers(updated);
+      setResetConfirm(false);
+      showToast('Team reset to defaults');
+    } catch {
+      showToast('Failed to reset team', 'error');
+    }
   };
 
   const renderForm = (data, setData, target, onSubmit, submitLabel, fileRef) => (

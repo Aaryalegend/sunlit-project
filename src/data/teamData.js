@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'sunlit_team_members';
+import { apiGet, apiSend } from './apiClient';
 
 const defaultTeamMembers = [
   {
@@ -39,49 +39,12 @@ const defaultTeamMembers = [
   },
 ];
 
-export function getTeamMembers() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch {
-    // ignore
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultTeamMembers));
-  return [...defaultTeamMembers];
-}
+export const getTeamMembers = () => apiGet('/api/team');
 
-export function saveTeamMembers(members) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(members));
-  return members;
-}
+export const addTeamMember = (member) => apiSend('/api/team', 'POST', member);
 
-export function addTeamMember(member) {
-  const members = getTeamMembers();
-  const newId = members.length > 0 ? Math.max(...members.map((m) => m.id)) + 1 : 1;
-  const newMember = { id: newId, ...member };
-  members.push(newMember);
-  saveTeamMembers(members);
-  return members;
-}
+export const removeTeamMember = (id) => apiSend(`/api/team?id=${id}`, 'DELETE');
 
-export function removeTeamMember(id) {
-  let members = getTeamMembers();
-  members = members.filter((m) => m.id !== id);
-  saveTeamMembers(members);
-  return members;
-}
+export const updateTeamMember = (id, updates) => apiSend('/api/team', 'PUT', { id, updates });
 
-export function updateTeamMember(id, updates) {
-  const members = getTeamMembers();
-  const index = members.findIndex((m) => m.id === id);
-  if (index !== -1) {
-    members[index] = { ...members[index], ...updates };
-  }
-  saveTeamMembers(members);
-  return members;
-}
-
-export function resetTeamMembers() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultTeamMembers));
-  return [...defaultTeamMembers];
-}
+export const resetTeamMembers = () => apiSend('/api/team', 'POST', { action: 'reset', items: defaultTeamMembers });

@@ -1,3 +1,5 @@
+import { apiGet, apiSend } from './apiClient';
+
 const STORAGE_KEY = 'sunlit_careers_positions';
 
 const defaultPositions = [
@@ -111,49 +113,12 @@ export const experienceOptions = [
   '12+ Years',
 ];
 
-export function getPositions() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch {
-    // ignore
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPositions));
-  return [...defaultPositions];
-}
+export const getPositions = () => apiGet('/api/careers');
 
-export function savePositions(positions) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(positions));
-  return positions;
-}
+export const addPosition = (position) => apiSend('/api/careers', 'POST', position);
 
-export function addPosition(position) {
-  const positions = getPositions();
-  const newId = positions.length > 0 ? Math.max(...positions.map((p) => p.id)) + 1 : 1;
-  const newPosition = { id: newId, ...position };
-  positions.push(newPosition);
-  savePositions(positions);
-  return positions;
-}
+export const updatePosition = (id, updates) => apiSend('/api/careers', 'PUT', { id, updates });
 
-export function removePosition(id) {
-  let positions = getPositions();
-  positions = positions.filter((p) => p.id !== id);
-  savePositions(positions);
-  return positions;
-}
+export const removePosition = (id) => apiSend(`/api/careers?id=${id}`, 'DELETE');
 
-export function updatePosition(id, updates) {
-  const positions = getPositions();
-  const index = positions.findIndex((p) => p.id === id);
-  if (index !== -1) {
-    positions[index] = { ...positions[index], ...updates };
-  }
-  savePositions(positions);
-  return positions;
-}
-
-export function resetPositions() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultPositions));
-  return [...defaultPositions];
-}
+export const resetPositions = () => apiSend('/api/careers', 'POST', { action: 'reset', items: defaultPositions });
