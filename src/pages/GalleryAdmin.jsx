@@ -25,7 +25,6 @@ const GalleryAdmin = () => {
   const [newItem, setNewItem] = useState({
     title: '',
     category: 'Installations',
-    description: '',
     gradient: 'from-blue-400 to-blue-700',
     image: null,
   });
@@ -71,13 +70,13 @@ const GalleryAdmin = () => {
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    if (!newItem.title.trim() || !newItem.description.trim()) {
+    if (!newItem.title.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
     const updated = await addGalleryItem(newItem);
     setItems(updated);
-    setNewItem({ title: '', category: 'Installations', description: '', gradient: 'from-blue-400 to-blue-700', image: null });
+    setNewItem({ title: '', category: 'Installations', gradient: 'from-blue-400 to-blue-700', image: null });
     setShowAddForm(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
     showToast('Gallery item added successfully!');
@@ -97,7 +96,7 @@ const GalleryAdmin = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!editingItem.title.trim() || !editingItem.description.trim()) {
+    if (!editingItem.title.trim()) {
       showToast('Please fill in all required fields', 'error');
       return;
     }
@@ -223,17 +222,6 @@ const GalleryAdmin = () => {
                   </select>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-bold text-dark mb-2">Description *</label>
-                <input
-                  type="text"
-                  value={newItem.description}
-                  onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
-                  required
-                  placeholder="Brief description of the image"
-                  className="w-full px-4 py-3 rounded-[12px] border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20"
-                />
-              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-bold text-dark mb-2">Upload Image (optional, max 5MB)</label>
@@ -326,16 +314,6 @@ const GalleryAdmin = () => {
                     ))}
                   </select>
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-dark mb-2">Description *</label>
-                <input
-                  type="text"
-                  value={editingItem.description}
-                  onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                  required
-                  className="w-full px-4 py-3 rounded-[12px] border border-gray-200 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20"
-                />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
@@ -446,7 +424,6 @@ const GalleryAdmin = () => {
                         <span className="text-xs text-gray-400">ID: {item.id}</span>
                       </div>
                       <h3 className="text-base md:text-lg font-bold text-dark truncate">{item.title}</h3>
-                      <p className="text-sm text-gray-500 truncate">{item.description}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <div className={`w-6 h-6 rounded bg-gradient-to-br ${item.gradient}`}></div>
                         <span className="text-xs text-gray-400">{item.image ? 'Has image' : 'Gradient only'}</span>

@@ -17,16 +17,19 @@ const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      addMessage(formData);
+    try {
+      await addMessage(formData);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '', service: '' });
-      setSubmitting(false);
       setToast({ message: 'Thank you for your message! We will get back to you soon.', type: 'success' });
+    } catch (err) {
+      setToast({ message: 'Failed to send message. Please try again later.', type: 'error' });
+    } finally {
+      setSubmitting(false);
       setTimeout(() => setToast(null), 4000);
-    }, 800);
+    }
   };
 
   const contactInfo = [

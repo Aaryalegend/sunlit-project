@@ -11,25 +11,36 @@ const Footer = () => {
 
   return (
     <footer className="w-full bg-[#082757] text-white relative">
-      <div className="w-full px-4 md:px-12 py-8 md:py-16 flex flex-col gap-12">
+      <div className="w-full px-4 md:px-12 py-4 md:py-6 flex flex-col gap-6">
         {/* Logos - Flex Container */}
-        <div className="flex flex-col md:flex-row gap-8 justify-between items-start md:items-center w-full">
+        <div className="flex flex-wrap gap-4 md:gap-6 justify-center lg:justify-between items-center w-full">
           <div>
             <img 
-              src={require('../assets/logo.png')} 
+              src={require('../assets/sunlittech-green.png')} 
               alt="Sun Lit Tech" 
-              className="h-[60px] md:h-[90px] w-auto object-contain"
+              className="h-[65px] md:h-[156px] w-auto object-contain"
               onError={(e) => {
                 e.target.outerHTML = '<div style="color: white; font-size: 24px; font-weight: bold;">Sun Lit Tech</div>';
               }}
             />
           </div>
-              
-          <div className="md:absolute md:left-1/2 md:-translate-x-1/2">
+
+          <div>
+            <img 
+              src={require('../assets/Make-in-India-logo.png')} 
+              alt="Make in India" 
+              className="h-[45px] md:h-[78px] w-auto object-contain"
+              onError={(e) => {
+                e.target.outerHTML = '<div style="color: white; font-size: 18px; font-weight: bold;">Make in India</div>';
+              }}
+            />
+          </div>
+
+          <div>
             <img 
               src={require('../assets/jal-hai.png')} 
               alt="Jal Hai Toh Kal Hai" 
-              className="h-[60px] md:h-[90px] w-auto object-contain"
+              className="h-[65px] md:h-[78px] w-auto object-contain"
               onError={(e) => {
                 e.target.outerHTML = '<div style="color: white; font-size: 24px; font-weight: bold;">Jal Hai</div>';
               }}
@@ -38,9 +49,20 @@ const Footer = () => {
 
           <div>
             <img 
+              src={require('../assets/MNRE_India.png')} 
+              alt="MNRE India" 
+              className="h-[45px] md:h-[78px] w-auto object-contain"
+              onError={(e) => {
+                e.target.outerHTML = '<div style="color: white; font-size: 18px; font-weight: bold;">MNRE India</div>';
+              }}
+            />
+          </div>
+
+          <div>
+            <img 
               src={require('../assets/save-girl.png')} 
               alt="Save Girl Child" 
-              className="h-[30px] md:h-[45px] w-auto object-contain"
+              className="h-[33px] md:h-[46px] w-auto object-contain"
               onError={(e) => {
                 e.target.outerHTML = '<div style="color: white; font-size: 24px; font-weight: bold;">Save Girl</div>';
               }}
@@ -49,16 +71,16 @@ const Footer = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 w-full">
           {/* Description & Socials */}
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
             <p className="text-base md:text-xl font-normal text-[#E6F2FF] leading-[1.226] tracking-[0.05em]">
               Leading solar energy and electrical infrastructure company in India, 
               delivering innovative and sustainable energy solutions since 2017
             </p>
 
             <div>
-              <h4 className="text-xl md:text-2xl font-bold mb-4 tracking-[0.05em]">Socials</h4>
+              <h4 className="text-xl md:text-2xl font-bold mb-2 tracking-[0.05em]">Socials</h4>
               <div className="flex gap-4">
                 <a href="https://www.facebook.com/share/1CaSYVoenw/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 hover:opacity-80 transition-opacity bg-white/10 rounded-full flex items-center justify-center">
                   <img src={require('../assets/facebook-icon.svg').default || require('../assets/facebook-icon.svg')} alt="Facebook" className="w-5 h-5" onError={(e) => e.target.style.display = 'none'} />
@@ -78,8 +100,8 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-xl md:text-2xl font-bold mb-4 tracking-[0.05em]">Quick Links</h4>
-            <ul className="space-y-4">
+            <h4 className="text-xl md:text-2xl font-bold mb-2 tracking-[0.05em]">Quick Links</h4>
+            <ul className="space-y-2">
               <li><Link to="/" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Journey with Energy</Link></li>
               <li><Link to="/careers" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Careers</Link></li>
               <li><Link to="/blogs" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Blogs</Link></li>
@@ -91,8 +113,8 @@ const Footer = () => {
 
           {/* Our Services */}
           <div>
-            <h4 className="text-xl md:text-2xl font-bold mb-4 tracking-[0.05em]">Our Services</h4>
-            <ul className="space-y-4">
+            <h4 className="text-xl md:text-2xl font-bold mb-2 tracking-[0.05em]">Our Services</h4>
+            <ul className="space-y-2">
               <li><a href="#service" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">On-Grid Solar Solutions</a></li>
               <li><a href="#service" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Off-Grid Solar Solutions</a></li>
               <li><a href="#service" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">Hybrid Solar Systems</a></li>
@@ -103,8 +125,8 @@ const Footer = () => {
 
           {/* Contact Us */}
           <div>
-            <h4 className="text-xl md:text-2xl font-bold mb-4 tracking-[0.05em]">Contact Us</h4>
-            <div className="space-y-4">
+            <h4 className="text-xl md:text-2xl font-bold mb-2 tracking-[0.05em]">Contact Us</h4>
+            <div className="space-y-2">
               {/* Address */}
               <div className="flex gap-3 items-start">
                 <img src={require('../assets/location-icon.svg')} alt="Location" className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] mt-1 flex-shrink-0" onError={(e) => e.target.style.display = 'none'} />
@@ -125,8 +147,11 @@ const Footer = () => {
               {/* Phone */}
               <div className="flex gap-3 items-center">
                 <img src={require('../assets/phone-icon.svg')} alt="Phone" className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] flex-shrink-0" onError={(e) => e.target.style.display = 'none'} />
-                <a href="tel:8055142323" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">
-                  8055142323 | 020-20890423
+                <a href="tel:9552819955" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">
+                  95528 19955 
+                </a>
+                <a href="tel:2020890423" className="text-sm md:text-base hover:text-[#1976D2] transition-colors leading-[1.226] tracking-[0.05em]">
+                  020-20890423
                 </a>
               </div>
             </div>

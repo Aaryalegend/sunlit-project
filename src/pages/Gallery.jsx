@@ -6,7 +6,7 @@ const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [galleryItems, setGalleryItems] = useState([]);
 
-  const filters = ['All', 'Installations', 'Team', 'Events', 'Before & After'];
+  const filters = ['All', 'Installations', 'Team'];
 
   useEffect(() => {
     const loadGallery = async () => {
@@ -82,7 +82,6 @@ const Gallery = () => {
                           {item.category}
                         </span>
                         <h4 className="text-base md:text-lg font-bold text-white mt-2">{item.title}</h4>
-                        <p className="text-xs md:text-sm text-white text-opacity-80 mt-1">{item.description}</p>
                       </div>
                     </div>
                   </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Header from './components/Header';
@@ -43,6 +43,10 @@ function HomePage() {
 function AppContent() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-white">

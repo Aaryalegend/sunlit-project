@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getPositions } from '../data/careersData';
 import { addApplication } from '../data/applicationsData';
 import { getTeamMembers } from '../data/teamData';
+import cultureImage from '../assets/Gemini_Generated_Image_bacpmqbacpmqbacp.png';
 
 const Careers = () => {
   const [expandedJob, setExpandedJob] = useState(null);
@@ -135,12 +136,12 @@ const Careers = () => {
                 for India and the world.
               </p>
             </div>
-            <div className="relative h-[300px] md:h-[400px] rounded-[20px] overflow-hidden shadow-card bg-gradient-to-br from-[#1976D2] to-[#0d47a1]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <svg className="w-20 h-20 text-white opacity-20" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                </svg>
-              </div>
+            <div className="relative h-[300px] md:h-[400px] rounded-[20px] overflow-hidden shadow-card">
+              <img 
+                src={cultureImage} 
+                alt="Our Culture at Sun Lit Tech" 
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>

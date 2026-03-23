@@ -17,7 +17,11 @@ const MessagesAdmin = () => {
   const [toast, setToast] = useState(null);
 
   useEffect(() => {
-    setMessages(getMessages());
+    const fetchMessages = async () => {
+      const data = await getMessages();
+      setMessages(data);
+    };
+    fetchMessages();
   }, []);
 
   const showToast = (message, type = 'success') => {
@@ -25,22 +29,22 @@ const MessagesAdmin = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const handleStatusChange = (id, status) => {
-    const updated = updateMessageStatus(id, status);
+  const handleStatusChange = async (id, status) => {
+    const updated = await updateMessageStatus(id, status);
     setMessages(updated);
     showToast(`Message marked as ${status}`);
   };
 
-  const handleDelete = (id) => {
-    const updated = removeMessage(id);
+  const handleDelete = async (id) => {
+    const updated = await removeMessage(id);
     setMessages(updated);
     setDeleteConfirm(null);
     setExpandedMsg(null);
     showToast('Message deleted');
   };
 
-  const handleClearAll = () => {
-    const updated = clearAllMessages();
+  const handleClearAll = async () => {
+    const updated = await clearAllMessages();
     setMessages(updated);
     setClearConfirm(false);
     showToast('All messages cleared');
@@ -68,11 +72,11 @@ const MessagesAdmin = () => {
     }
   };
 
-  const handleExpand = (id) => {
+  const handleExpand = async (id) => {
     if (expandedMsg !== id) {
       const msg = messages.find((m) => m.id === id);
       if (msg && msg.status === 'unread') {
-        handleStatusChange(id, 'read');
+        await handleStatusChange(id, 'read');
       }
     }
     setExpandedMsg(expandedMsg === id ? null : id);

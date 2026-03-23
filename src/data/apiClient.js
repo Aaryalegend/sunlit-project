@@ -6,13 +6,22 @@ const handleJsonResponse = async (response) => {
   return response.json();
 };
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL || '';
+
+const buildUrl = (path) => {
+  if (!API_BASE) return path;
+  const base = API_BASE.endsWith('/') ? API_BASE.slice(0, -1) : API_BASE;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${normalizedPath}`;
+};
+
 export const apiGet = async (path) => {
-  const response = await fetch(path, { method: 'GET' });
+  const response = await fetch(buildUrl(path), { method: 'GET' });
   return handleJsonResponse(response);
 };
 
 export const apiSend = async (path, method, body) => {
-  const response = await fetch(path, {
+  const response = await fetch(buildUrl(path), {
     method,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

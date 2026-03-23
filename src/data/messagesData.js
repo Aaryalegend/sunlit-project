@@ -1,60 +1,29 @@
-const STORAGE_KEY = 'sunlit_contact_messages';
+import { apiGet, apiSend } from './apiClient';
 
-export function getMessages() {
+const API_PATH = '/api/messages';
+
+export async function getMessages() {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored);
+    return await apiGet(API_PATH);
   } catch {
-    // ignore
+    return [];
   }
-  return [];
 }
 
-function saveMessages(msgs) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
-  return msgs;
+export async function addMessage(message) {
+  return await apiSend(API_PATH, 'POST', { item: message });
 }
 
-export function addMessage(message) {
-  const msgs = getMessages();
-  const newId = msgs.length > 0 ? Math.max(...msgs.map((m) => m.id)) + 1 : 1;
-  const newMsg = {
-    id: newId,
-    ...message,
-    status: 'unread',
-    submittedAt: new Date().toLocaleString('en-IN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-  };
-  msgs.unshift(newMsg);
-  saveMessages(msgs);
-  return msgs;
+export async function updateMessageStatus(id, status) {
+  return await apiSend(API_PATH, 'PUT', { id, updates: { status } });
 }
 
-export function updateMessageStatus(id, status) {
-  const msgs = getMessages();
-  const index = msgs.findIndex((m) => m.id === id);
-  if (index !== -1) {
-    msgs[index].status = status;
-  }
-  saveMessages(msgs);
-  return msgs;
+export async function removeMessage(id) {
+  return await apiSend(`${API_PATH}?id=${id}`, 'DELETE');
 }
 
-export function removeMessage(id) {
-  let msgs = getMessages();
-  msgs = msgs.filter((m) => m.id !== id);
-  saveMessages(msgs);
-  return msgs;
-}
-
-export function clearAllMessages() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-  return [];
+export async function clearAllMessages() {
+  return await apiSend(`${API_PATH}?action=clear`, 'POST');
 }
 
 export const statusOptions = ['unread', 'read', 'replied', 'archived'];

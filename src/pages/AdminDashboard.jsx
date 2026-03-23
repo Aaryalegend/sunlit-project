@@ -25,10 +25,11 @@ const AdminDashboard = () => {
   }, []);
 
   const loadStats = async () => {
-    const [projects, blogs, gallery] = await Promise.all([
+    const [projects, blogs, gallery, messages] = await Promise.all([
       getProjects(),
       getBlogs(),
       getGalleryItems(),
+      getMessages(),
     ]);
 
     setStats({
@@ -38,7 +39,7 @@ const AdminDashboard = () => {
       positions: getPositions().length,
       team: getTeamMembers().length,
       applications: getApplications().length,
-      messages: getMessages().filter(m => m.status === 'unread').length,
+      messages: messages.filter(m => m.status === 'unread').length,
     });
   };
 

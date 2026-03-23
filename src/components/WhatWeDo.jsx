@@ -9,37 +9,37 @@ const WhatWeDo = () => {
 
   const services = [
     {
-      image: require('../assets/service-1.svg'),
+      image: 'https://res.cloudinary.com/dsgd4vb02/image/upload/v1774248216/Screenshot_20260323_120449_k17xq2.png',
       title: 'On-Grid solar Solutions',
       description: 'Grid-tied systems with net metering for maximum savings and ROI.'
     },
     {
-      image: require('../assets/service-2.svg'),
+      image: 'https://res.cloudinary.com/dsgd4vb02/image/upload/v1774248216/Screenshot_20260323_120417_jl5ulz.png',
       title: 'Off-Grid Solar Solutions',
       description: 'Independent power systems for remote locations with battery backup.'
     },
     {
-      image: require('../assets/service-3.svg'),
+      image: 'https://res.cloudinary.com/dsgd4vb02/image/upload/v1774248216/Screenshot_20260323_121320_dodhxo.png',
       title: 'Hybrid Solar Systems',
       description: 'Best of both worlds - grid connection with battery backup security.'
     },
     {
-      image: require('../assets/service-4.svg'),
+      image: 'https://res.cloudinary.com/dsgd4vb02/image/upload/v1774248240/groundMounted_hde9o4.webp',
       title: 'Ground-Mounted Solar',
       description: 'Large-scale solar installations for industrial and commercial use.'
     },
     {
-      image: require('../assets/service-5.svg'),
+      image: 'https://res.cloudinary.com/dsgd4vb02/image/upload/v1774248240/OpenAccess_itjvky.jpg',
       title: 'Open-access Solar Parks',
       description: 'Residential and commercial rooftop solar panel installations.'
     },
     {
-      image: require('../assets/service-6.svg'),
+      image: 'https://res.cloudinary.com/dsgd4vb02/image/upload/v1774248243/o_m_vpd78i.png',
       title: 'O&M Services',
       description: 'Comprehensive operation and maintenance for optimal performance.'
     },
     {
-      image: require('../assets/service-6.svg'),
+      image: 'https://res.cloudinary.com/dsgd4vb02/image/upload/v1774248241/HT-LT-Cables_nzpzjx.png',
       title: 'HT & LT Cabling and Installations',
       description: 'Electrical Infrastructure with Sanctioning HT & LT Cabling and Installations.'
     }
